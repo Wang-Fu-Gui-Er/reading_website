@@ -63,19 +63,18 @@
             <span class="more" v-if="item.isMore">更多></span>
           </div>
           <div class="content">
-            <div v-for="book,bookIndex in books[item.nick]" v-on:mouseout="leaveBook(typeIndex, bookIndex)" v-on:mouseover="hoverBook(typeIndex, bookIndex)" class="book">
+            <div v-for="book,bookIndex in books[item['nick']]" v-on:mouseout="leaveBook(typeIndex, bookIndex)" v-on:mouseover="hoverBook(typeIndex, bookIndex)" class="book">
               <div :class="{hover: book.isHover}" class="bottom">
                 <div class="cover">
                   <img src="../assets/book_cover.jpeg" alt="">
                 </div>
-                
               </div>
               <!-- <div v-if="book.isHover" class="top"> -->
-              <div class="top">
+              <div class="top" :class="{bookHover: book.isHover}">
                 <div class="score">{{book.score}}</div>
                 <div class="star">
                   <img src="../assets/lack_star.png" alt="">
-                  <img style="clip:rect(auto,{{book.score}}%,auto,auto);" src="../assets/full_star.png" alt="">
+                  <img :style="'clip:rect(auto,'+ book.score * 84 / 5 +'px,auto,auto);'" src="../assets/full_star.png" alt="">
                 </div>
                 <div class="isFinish">{{book.isFinish ? '完结' : '连载'}}</div>
               </div>
@@ -91,7 +90,14 @@
       </div>
 
     </div>
-    
+    <div class="footer">
+      如有问题欢迎联系<a href="www.baidu.com">意见反馈</a>
+    </div>
+    <div class="sticky">
+      <div>
+      </div>
+      <div>意见反馈</div>
+    </div>
   </div>
 </template>
 
@@ -117,7 +123,7 @@ export default {
         popular: [{
           name: '熊镇',
           author_name: '恩田陆',
-          score: 4.5,
+          score: 0,
           isFinish: false
         },
         {
@@ -141,7 +147,7 @@ export default {
         {
           name: '熊镇',
           author_name: '恩田陆',
-          score: 4.5,
+          score: 5,
           isFinish: false
         },
         {
@@ -323,22 +329,42 @@ export default {
             margin-top: 20%;
             // font-size: 10px;
             >div {
-              height: 20%;
-              // padding: 30px 0px;
-              // line-height: 50%;
+              // height: 20%;
+              position: absolute;
+              bottom: 0px;
+              top: 80%;
+              left: 50%;
+              transform: translateX(-50%);
+              opacity: 0;
             }
             .star {
-              position: relative;
+              // position: relative;
               >img {
                 position: absolute;
                 left: 50%;
                 transform: translateX(-50%);
-                
+              }
+            }
+          }
+          .bookHover {
+            >div {
+              transition: all .6s ease-in;
+              opacity: 1;
+              &:first-of-type {
+                top: 10%;
+                // transition-delay: .6s;
+              }
+              &:nth-of-type(2) {
+                top: 20%;
+                transition-delay: .5s;
+              }
+              &:nth-of-type(3) {
+                top: 40%;
+                transition-delay: 1s;
               }
             }
           }
         }
-        
       }
     }
     }
