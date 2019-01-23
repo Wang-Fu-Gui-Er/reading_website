@@ -94,9 +94,10 @@
       如有问题欢迎联系<a href="www.baidu.com">意见反馈</a>
     </div>
     <div class="sticky">
-      <div>
+      <div class="up">
+        <img src="../assets/up.png" alt="">
       </div>
-      <div>意见反馈</div>
+      <div class="text">意见反馈</div>
     </div>
   </div>
 </template>
@@ -204,8 +205,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+
 .main {
   // 这个地方要调整一下
+  // width: 100vw;
   .write{
     width: 900px;
     margin: 0 auto;
@@ -225,6 +228,7 @@ export default {
       }
     }
     .tail {
+      margin-top: 8px;
       float: right;
       font-size: 12px;
       a {
@@ -233,7 +237,6 @@ export default {
         &:hover{
           color: #aaa;
         }
-
       }
     }
   }
@@ -367,6 +370,34 @@ export default {
         }
       }
     }
+    }
+  }
+  .footer {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+  }
+  .sticky {
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    width: 40px;
+    text-align: center;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    .up {
+      margin: 0 auto;
+      width: 20px;
+      height: 20px;
+      img {
+        width: 100%;
+        height: 100%;
+        vertical-align: middle;
+      }
+    }
+    .text {
+      border: 1px solid #ccc;
+      width: 40px;
     }
   }
 }
