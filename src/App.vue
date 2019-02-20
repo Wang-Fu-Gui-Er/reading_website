@@ -11,6 +11,7 @@ export default {
 </script>
 
 <style>
+@import url('./assets/css/common.scss');
 body {
   margin: 0px;
 }

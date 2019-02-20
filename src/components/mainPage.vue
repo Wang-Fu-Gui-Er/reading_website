@@ -109,14 +109,14 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-@import url('./../assets/css/common.scss');
+<style lang="scss">
+// @import url('./../assets/css/common.scss');
 
 .main {
   // 这个地方要调整一下
   // width: 100vw;
   .write{
-    width: 900px;
+    width: $width;
     margin: 0 auto;
   }
   .head {

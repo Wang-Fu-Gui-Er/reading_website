@@ -12,13 +12,13 @@
     <div class="yellow">
         <div class="inner-content">
             <div class="line"></div>
-            <div class="moreable" v-for="item,typeIndex in moreable" :key="item.id">
+            <div class="moreable" v-for="item,typeIndex in moreable" :key="typeIndex">
             <div class="head">
                 {{item.name}}
                 <span class="more" v-if="item.isMore">更多></span>
             </div>
             <div class="content">
-                <div v-for="book,bookIndex in books[item['nick']]" :key="item.id" v-on:mouseout="leaveBook(typeIndex, bookIndex)" v-on:mouseover="hoverBook(typeIndex, bookIndex)" class="book">
+                <div v-for="book,bookIndex in books[item['nick']]" :key="bookIndex" v-on:mouseout="leaveBook(typeIndex, bookIndex)" v-on:mouseover="hoverBook(typeIndex, bookIndex)" class="book">
                 <div :class="{hover: book.isHover}" class="bottom">
                     <div class="cover">
                     <img src="../assets/img/book_cover.jpeg" alt="">
