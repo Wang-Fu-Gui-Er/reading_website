@@ -38,11 +38,7 @@
         </div>
       </div>
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="1">首页</el-menu-item>
-        <el-menu-item index="2">分类</el-menu-item>
-        <el-menu-item index="3">有声书物</el-menu-item>
-        <el-menu-item index="4">分享会</el-menu-item>
-        <el-menu-item index="5">榜单</el-menu-item>
+        <el-menu-item v-for="item, index in menu" :key="index" :index="index.toString()">{{item}}</el-menu-item>
       </el-menu>
     </div>
     <router-view></router-view>
@@ -60,6 +56,7 @@
 
 <script>
 let _ = require('lodash');
+
 export default {
   name: 'mainPage',
   data () {
@@ -70,6 +67,7 @@ export default {
       isLogin: false,
       name: '',
       activeIndex: '1',
+      menu: ['首页', '分类', '有声书物', '分享会', '榜单']
     }
   },
   mounted() {
@@ -99,7 +97,7 @@ export default {
     handleSelect(key) {
       let menuIndex = parseInt(key);
       let path = '/';
-      if (menuIndex === 2) {
+      if (menuIndex === 1) {
         path = '/sort'
       }
       this.$router.push({path});
@@ -110,11 +108,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-// @import url('./../assets/css/common.scss');
 
 .main {
   // 这个地方要调整一下
-  // width: 100vw;
+  max-width: 100vw;
+  min-width: 100vw;
+  // min-width: 1000px;
   .write{
     width: $width;
     margin: 0 auto;
@@ -125,10 +124,10 @@ export default {
       float: left;
       height: 100px;
       .image{
-        height: 100px;
-        img{
-          vertical-align: middle;
-          height: 100px;
+        width: 190px;
+        // height: 100px;
+        @media screen and (max-width: 568px) {
+            width: 80px;
         }
         display: inline-block;
       }
@@ -143,7 +142,9 @@ export default {
     height: 40px;
     line-height: 40px;
     text-align: center;
+    color: $grey;
     a {
+      color: black;
       text-decoration: underline;
     }
   }
@@ -151,7 +152,7 @@ export default {
     position: fixed;
     right: 0px;
     bottom: 0px;
-    width: 40px;
+    width: 50px;
     text-align: center;
     margin-right: 10px;
     margin-bottom: 10px;
@@ -162,10 +163,10 @@ export default {
       img {
         width: 100%;
         height: 100%;
-        vertical-align: middle;
       }
     }
     .text {
+      padding: 5px;
       border: 1px solid #ccc;
       width: 40px;
     }

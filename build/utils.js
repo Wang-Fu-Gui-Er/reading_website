@@ -65,10 +65,11 @@ exports.cssLoaders = function (options) {
         loader: 'sass-resources-loader',
         options: {
             //你自己的scss全局文件的路径
-          resources: path.resolve(__dirname, '../src/common/style/index.scss')
+          resources: path.resolve(__dirname, '../src/common/css/index.scss')
         }
       }
     ),
+    // scss: generateLoaders('sass'),
     stylus: generateLoaders('stylus'),
     styl: generateLoaders('stylus')
   }
