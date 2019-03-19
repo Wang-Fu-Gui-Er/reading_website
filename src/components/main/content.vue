@@ -3,13 +3,16 @@
         <div class="sort">
         <header>分类</header>
         <div class="content">
-        <el-button size="mini" plain v-for="item in sort" :key="item.id">
-        {{item}}
-        </el-button>
-    </div>
+            <el-button size="mini" plain v-for="item in sort" :key="item.id">
+            {{item}}
+            </el-button>
+        </div>
     </div>
     <!-- <block></block> -->
-    <div class="yellow">
+    <div class="yellow"
+        v-loading="moreLoading"
+        element-loading-text="拼命加载中"
+        element-loading-background="#f6f5ee">
         <div class="inner-content">
             <div class="moreable" v-for="item, typeIndex in moreable" :key="typeIndex">
             <div class="line" v-if="typeIndex > 0"></div>
@@ -64,31 +67,14 @@ export default {
                 name: '经典推荐',
                 isMore: true,
             }],
-            books: []
+            books: [],
+            moreLoading: false
         }
     },
     created() {
-        getSecSort().then((res) => {
-            const sort = res.map((item) => {
-                return item.cateName;
-            });
-            this.sort = sort;
-        });
-
-        const moreable = ['newly', 'favorable', 'classic'];
-        const allPromises = moreable.map(item => {
-            return getBook({
-                recommendType: item,
-                pageNum: 1,
-                pageSize: 50
-            })
-        })
-        Promise.all(allPromises).then(res => {
-            const books = res.map(item => {
-                return item.data;
-            })
-            this.books = books;
-        })
+        this.moreLoading = true;
+        this.initConfig();
+        this.moreLoading = false;
     },
     methods: {
         hoverBook(typeIndex, bookIndex) {
@@ -96,7 +82,19 @@ export default {
         },
         leaveBook(typeIndex, bookIndex) {
             this.$set(this.books[typeIndex][bookIndex], 'isHover', false);
-        }
+        },
+        async initConfig() {
+            const sort = await getSecSort().then(res => res.map(item => item.cateName));
+            const moreable = ['newly', 'favorable', 'classic'];
+            const allPromises = moreable.map(item => getBook({
+                recommendType: item,
+                pageNum: 1,
+                pageSize: 50
+            }));
+            const books = await Promise.all(allPromises).then(res => res.map(item => item.data));
+            this.sort = sort;
+            this.books = books;
+        },
     }
 }
 </script>
@@ -113,9 +111,15 @@ export default {
         text-align: center;
         flex-basis: 100px;
     }
-
-    .el-button {
-        margin: 10px 0px 0px 10px;
+    .content {
+        width: 100%;
+        display: grid;
+        grid-gap: 10px;
+        grid-template-columns: repeat(auto-fit, 68px);
+        grid-row-gap: 10px;
+        .el-button {
+            margin: 0px;
+        }
     }
 }
 
