@@ -6,3 +6,4 @@ import fetch from '../config/fetch'
 
 export const getSecSort = () => fetch('/category/homeSmallCategory');
 export const getBook = param => fetch('/book/list/recommend', param);
+export const getAllCategory = () => fetch('/category/getAllCategory');

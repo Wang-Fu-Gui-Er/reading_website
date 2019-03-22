@@ -18,7 +18,11 @@
             <div class="line" v-if="typeIndex > 0"></div>
             <div class="head">
                 {{item.name}}
-                <span class="more" v-if="item.isMore">更多></span>
+                <span class="more" v-if="item.isMore">
+                    更多>
+                </span>
+                <span v-else>
+                </span>
             </div>
             <div class="content">
                 <div v-for="book, bookIndex in books[typeIndex]" :key="bookIndex" @mouseout="leaveBook(typeIndex, bookIndex)" @mouseover="hoverBook(typeIndex, bookIndex)" class="book">
@@ -50,7 +54,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import {getSecSort, getBook} from '@/api/api';
+import getAllCategory from './common/getAllCategory.js';
 
 export default {
     name: 'mainPageContent',
@@ -68,13 +75,17 @@ export default {
                 isMore: true,
             }],
             books: [],
-            moreLoading: false
+            moreLoading: true
         }
     },
     created() {
-        this.moreLoading = true;
         this.initConfig();
-        this.moreLoading = false;
+        getAllCategory(this.allCategory); // 为优化用户体验 提前请求分类的东西
+    },
+    computed: {
+        ...mapState([
+            'allCategory'
+        ])
     },
     methods: {
         hoverBook(typeIndex, bookIndex) {
@@ -91,9 +102,17 @@ export default {
                 pageNum: 1,
                 pageSize: 50
             }));
-            const books = await Promise.all(allPromises).then(res => res.map(item => item.data));
+            const books = await Promise.all(allPromises).then(res => res.map(item => {
+                let data = item.data;
+                data.map(book => {
+                    book.avgScore = book.avgScore.toFixed(1);
+                    return book;
+                });
+                return data;
+            }));
             this.sort = sort;
             this.books = books;
+            this.moreLoading = false;
         },
     }
 }
@@ -113,12 +132,15 @@ export default {
     }
     .content {
         width: 100%;
-        display: grid;
-        grid-gap: 10px;
-        grid-template-columns: repeat(auto-fit, 68px);
-        grid-row-gap: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        // display: grid;
+        // grid-gap: 10px;
+        // grid-template-columns: repeat(auto-fit, 68px);
+        // grid-row-gap: 10px;
         .el-button {
-            margin: 0px;
+            // margin: 0px;
+            margin: 5px 10px 0;
         }
     }
 }
@@ -153,6 +175,8 @@ export default {
                 span {
                     float: right;
                     font-size: 10px;
+                    width: 32px;
+                    height: 50px;
                 }
             }
 

@@ -56,7 +56,7 @@
 
 <script>
 let _ = require('lodash');
-
+// 首屏优化考虑一下
 export default {
   name: 'mainPage',
   data () {
@@ -66,7 +66,7 @@ export default {
       timeout:  null,
       isLogin: false,
       name: '',
-      activeIndex: '1',
+      activeIndex: '0',
       menu: ['首页', '分类', '有声书物', '分享会', '榜单']
     }
   },
@@ -92,7 +92,7 @@ export default {
       };
     },
     search(item) {
-      console.log(item);
+      // console.log(item);
     },
     handleSelect(key) {
       let menuIndex = parseInt(key);

@@ -12,7 +12,7 @@ let imgBaseUrl = '';
 
 
 if (process.env.NODE_ENV === 'development') {
-    baseUrl = 'https://www.easy-mock.com/mock/5c6d317e8d040716434d0a5b/reading';
+    baseUrl = 'http://yapi.demo.qunar.com/mock/60609';
 
 } else if (process.env.NODE_ENV === 'production') {
 	baseUrl = '//elm.cangdu.org';

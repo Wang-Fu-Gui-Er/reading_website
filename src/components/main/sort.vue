@@ -4,7 +4,7 @@
             <div class="menu">
                 <header>全部图书分类</header>
                 <ul class="menu-content">
-                    <li v-for="item in sort" :key="item.id">
+                    <li v-for="item in allCategory" :key="item.id">
                         <!-- <slot/> -->
                         {{item.bigCateGoryDO.cateName}}
                         <div class="secSort">
@@ -19,76 +19,31 @@
     </div>
 </template>
 <script>
+// import {getAllCategory} from '@/api/api.js';
+import {mapState, mapActions} from 'vuex';
+
+import getAllCategory from './common/getAllCategory.js';
+
 export default {
     data() {
         return {
-            sort: [{
-                bigCateGoryDO: {
-                    id: 1,
-                    created: '1234',
-                    cateName: '小说'
-                },
-                smallCateGoryDO: [{
-                    id: 0,
-                    cateName: '言情'
-                },{
-                    id: 0,
-                    cateName: '青春'
-                },{
-                    id: 0,
-                    cateName: '历史'
-                }]
-            }, {
-                bigCateGoryDO: {
-                    id: 1,
-                    created: '1234',
-                    cateName: '小说'
-                },
-                smallCateGoryDO: [{
-                    id: 0,
-                    cateName: '言情'
-                },{
-                    id: 0,
-                    cateName: '青春'
-                },{
-                    id: 0,
-                    cateName: '历史'
-                }]
-            }, {
-                bigCateGoryDO: {
-                    id: 1,
-                    created: '1234',
-                    cateName: '小说'
-                },
-                smallCateGoryDO: [{
-                    id: 0,
-                    cateName: '言情'
-                },{
-                    id: 0,
-                    cateName: '青春'
-                },{
-                    id: 0,
-                    cateName: '历史'
-                }]
-            }, {
-                bigCateGoryDO: {
-                    id: 1,
-                    created: '1234',
-                    cateName: '小说'
-                },
-                smallCateGoryDO: [{
-                    id: 0,
-                    cateName: '言情'
-                },{
-                    id: 0,
-                    cateName: '青春'
-                },{
-                    id: 0,
-                    cateName: '历史'
-                }]
-            }]
+            // allCategory: []
         }
-    }
+    },
+    created() {
+        console.log(getAllCategory(this.allCategory));
+        // console.log(getAllCategory(this.allCategory));
+    },
+    computed: {
+        ...mapState([
+            'allCategory'
+        ])
+    },
+    methods: {
+        async initConfig() {
+            // const allBook = await getAllCategory();
+        }
+    },
 }
 </script>
 <style lang="scss" scoped>

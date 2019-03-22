@@ -1,0 +1,2 @@
+
+export const CHANGE_ALL_CATEGORY = 'CHANGE_ALL_CATEGORY';

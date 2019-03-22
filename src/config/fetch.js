@@ -19,22 +19,22 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
     }
 
 	if (window.fetch && method == 'fetch') {
-		let requestConfig = {
-			credentials: 'include',
-			method: type,
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			mode: "cors",
-			cache: "force-cache"
-		}
+		// let requestConfig = {
+		// 	credentials: true,
+		// 	method: type,
+		// 	headers: {
+		// 		'Accept': 'application/json',
+		// 		'Content-Type': 'application/json'
+		// 	},
+		// 	mode: "cors",
+		// 	cache: "force-cache"
+		// }
 
-		if (type == 'POST') {
-			Object.defineProperty(requestConfig, 'body', {
-				value: JSON.stringify(data)
-			})
-		}
+		// if (type == 'POST') {
+		// 	Object.defineProperty(requestConfig, 'body', {
+		// 		value: JSON.stringify(data)
+		// 	})
+		// }
 
 		/**
 		 * 返回结果状态码
@@ -50,14 +50,14 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 		*/
 
 		try {
-			const response = await fetch(url, requestConfig);
+			const response = await fetch(url);
 			const responseJson = await response.json();
 			if (responseJson.code === 1001) {
 				if (responseJson.page) {
 					return {
 						data: responseJson.data,
 						page: responseJson.page
-					}
+					};
 				}
 				return responseJson.data;
 			}
