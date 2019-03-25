@@ -4,7 +4,7 @@
         title="注册"
         :visible.sync="isRegister"
         width="40%"
-        :before-close="close">
+        :before-close="closeDialog">
         <el-form ref="form" :rules="rules" :model="register" label-width="120px">
             <el-form-item  ref="mail" label="邮箱:" prop="email">
                 <el-input v-model="register.email"></el-input>
@@ -21,7 +21,7 @@
             </el-form-item>
             <el-form-item class="button">
                 <el-button type="primary" @click="submitForm">提交</el-button>
-                <el-button @click="close">取消</el-button>
+                <el-button @click="closeDialog">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -113,7 +113,7 @@ export default {
                     message: '注册成功',
                     type: 'success'
                 });
-                this.close();
+                this.closeDialog();
             }
             catch(err) {
                 this.$message({
@@ -132,7 +132,7 @@ export default {
                 }
             })
         },
-        close() {
+        closeDialog() {
             this.$refs.form.resetFields();
             this.$emit('closeRegister', false);
         }

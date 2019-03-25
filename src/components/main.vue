@@ -24,7 +24,7 @@
             </div>
         <div class="tail">
           <template v-if="!isLogin">
-            <a href="http://">登陆</a>
+            <a @click="isLogin = true">登陆</a>
             <span class="sperate_line">
               |
             </span>
@@ -71,7 +71,8 @@ export default {
       name: '',
       activeIndex: '0',
       menu: ['首页', '分类', '有声书物', '分享会', '榜单'],
-      isRegister: false
+      isRegister: false,
+      isLogin: false
     }
   },
   components: {
