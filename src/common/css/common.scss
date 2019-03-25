@@ -1,11 +1,12 @@
 
-$width: 70vw;
+$width: 85vw;
 
 $grey: #666;
 $greyHover: #aaa;
 $black: black;
 
 a {
+    cursor: pointer;
     color: #666;
     text-decoration: none;
     &:hover{

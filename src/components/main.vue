@@ -28,7 +28,7 @@
             <span class="sperate_line">
               |
             </span>
-            <a href="">注册</a>
+            <a @click="isRegister = true">注册</a>
           </template>
           <template v-else>
             {{name}}
@@ -42,6 +42,7 @@
       </el-menu>
     </div>
     <router-view></router-view>
+    <Register v-model="isRegister"></Register>
     <div class="footer">
       如有问题欢迎联系<a href="www.baidu.com">意见反馈</a>
     </div>
@@ -56,6 +57,8 @@
 
 <script>
 let _ = require('lodash');
+
+import Register from './Register.vue';
 // 首屏优化考虑一下
 export default {
   name: 'mainPage',
@@ -67,8 +70,20 @@ export default {
       isLogin: false,
       name: '',
       activeIndex: '0',
-      menu: ['首页', '分类', '有声书物', '分享会', '榜单']
+      menu: ['首页', '分类', '有声书物', '分享会', '榜单'],
+      isRegister: false
     }
+  },
+  components: {
+    Register
+  },
+  created() {
+    // may change later
+    const pathArr = this.$route.path.split('/');
+    const curRoute = pathArr.length > 0 ? pathArr[1] : '';
+    const routeArr = ['', 'sort'];
+    const activeIndex = routeArr.findIndex(item => item === curRoute);
+    this.activeIndex = activeIndex.toString();
   },
   mounted() {
     this.restaurants = this.loadAll();

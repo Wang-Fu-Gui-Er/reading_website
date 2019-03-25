@@ -25,7 +25,7 @@
                 </span>
             </div>
             <div class="content">
-                <div v-for="book, bookIndex in books[typeIndex]" :key="bookIndex" @mouseout="leaveBook(typeIndex, bookIndex)" @mouseover="hoverBook(typeIndex, bookIndex)" class="book">
+                <div v-for="book, bookIndex in books[typeIndex]" :key="bookIndex" @mouseout="isHoverBook(typeIndex, bookIndex, false)" @mouseover="isHoverBook(typeIndex, bookIndex, true)" class="book">
                 <div :class="{hover: book.isHover}" class="bottom">
                     <div class="cover">
                         <img :src="book.bookPic" alt="">
@@ -66,13 +66,13 @@ export default {
             sort: [],
             moreable: [{
                 name: '新书推荐',
-                isMore: true,
+                isMore: true
             }, {
                 name: '最受好评',
-                isMore: false,
+                isMore: false
             }, {
                 name: '经典推荐',
-                isMore: true,
+                isMore: true
             }],
             books: [],
             moreLoading: true
@@ -80,19 +80,11 @@ export default {
     },
     created() {
         this.initConfig();
-        getAllCategory(this.allCategory); // 为优化用户体验 提前请求分类的东西
-    },
-    computed: {
-        ...mapState([
-            'allCategory'
-        ])
+        getAllCategory(); // 为优化用户体验 提前请求分类的东西
     },
     methods: {
-        hoverBook(typeIndex, bookIndex) {
-            this.$set(this.books[typeIndex][bookIndex], 'isHover', true);
-        },
-        leaveBook(typeIndex, bookIndex) {
-            this.$set(this.books[typeIndex][bookIndex], 'isHover', false);
+        isHoverBook(typeIndex, bookIndex, isHover) {
+            this.$set(this.books[typeIndex][bookIndex], 'isHover', isHover);
         },
         async initConfig() {
             const sort = await getSecSort().then(res => res.map(item => item.cateName));
