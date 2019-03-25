@@ -4,8 +4,12 @@
         title="注册"
         :visible.sync="isRegister"
         width="40%"
+        :close-on-click-modal="false"
         :before-close="close">
-        <el-form ref="form" :rules="rules" :model="register" label-width="120px">
+        <el-form ref="form" label-position="left" :rules="rules" :model="register" label-width="120px">
+            <el-form-item  label="用户名:" prop="username">
+                <el-input v-model="register.username"></el-input>
+            </el-form-item>
             <el-form-item  ref="mail" label="邮箱:" prop="email">
                 <el-input v-model="register.email"></el-input>
             </el-form-item>
@@ -66,11 +70,15 @@ export default {
         }
         return {
             register: {
+                username: '',
                 email: '',
                 password: '',
                 checkPassword: ''
             },
             rules: {
+                username: [
+                    { required: true, message: '请输入用户名', trigger: 'blur' },
+                ],
                 email: [
                     { required: true, message: '请输入邮箱地址', trigger: 'blur' },
                     { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur'] }
@@ -142,10 +150,13 @@ export default {
 <style lang="scss">
     .register {
         .button {
-            // text-align: center;
-            button:nth-of-type(2){
-                // margin: 0 65px;
-                margin-left: 80px;
+            button{
+                &:nth-of-type(1) {
+                    margin-left: 60px;
+                }
+                &:nth-of-type(2){
+                    margin-left: 80px;
+                }
             }
         }
         .verifycode {
