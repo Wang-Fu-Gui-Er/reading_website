@@ -32,9 +32,9 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 		*/
 
 		try {
-			const response = type === 'GET' ? await fetch(url) : await fetch(url, {method: 'post', body: JSON.stringify(data)});
+			const response = type === 'GET' ? await fetch(url, {mode: 'cors'}) : await fetch(url, {mode: 'cors', method: 'post', body: JSON.stringify(data)});
 			const responseJson = await response.json();
-			if (responseJson.code === 1001) {
+			if (responseJson.success) {
 				if (responseJson.page) {
 					return {
 						data: responseJson.data,

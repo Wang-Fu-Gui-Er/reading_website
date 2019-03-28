@@ -50,9 +50,6 @@ export default {
             e.stopPropagation();
         },
         async initConfig() {
-            // const allCategory = this.allCategory;
-            // const allCategory = allCategory.length > 0 ? allCategory : await getAllCategory();
-            console.log(getStore('allCategory'));
             if (!getStore('allCategory')) {
                 await getAllCategory();
             }

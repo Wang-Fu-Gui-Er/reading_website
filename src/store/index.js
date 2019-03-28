@@ -6,7 +6,7 @@ import actions from './actions'
 Vue.use(Vuex)
 
 const state = {
-    allCategory: [] // 为优化用户体验
+    // allCategory: [] // 为优化用户体验
 }
 
 export default new Vuex.Store({
