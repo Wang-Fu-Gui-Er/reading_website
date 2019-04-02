@@ -29,10 +29,8 @@
             </el-form-item>
         </el-form>
     </el-dialog>
-
 </template>
 <script>
-
 
 import {sendVerifyCode, checkVerifyCode, userRegister} from '@/api/api';
 
@@ -150,12 +148,12 @@ export default {
 <style lang="scss">
     .register {
         .button {
-            button{
-                &:nth-of-type(1) {
-                    margin-left: 60px;
-                }
-                &:nth-of-type(2){
-                    margin-left: 80px;
+            .el-form-item__content {
+                display: flex;
+                // width: 100%;
+                justify-content: space-evenly;
+                button{
+                    // flex: 1;
                 }
             }
         }
@@ -171,6 +169,9 @@ export default {
                 border-color: #409EFF;
                 color: #2a90f9;
             }
+        }
+        .el-dialog__header, .el-dialog__body {
+            // padding: 0 30px;
         }
     }
 </style>

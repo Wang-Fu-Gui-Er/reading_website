@@ -1,6 +1,6 @@
 <template>
     <div class="main-page-content">
-        <div class="sort">
+        <div class="main-sort">
         <header>分类</header>
         <div class="content">
             <el-button size="mini" plain v-for="item in sort" :key="item.id">
@@ -25,7 +25,12 @@
                 </span>
             </div>
             <div class="content">
-                <div v-for="book, bookIndex in books[typeIndex]" :key="bookIndex" @mouseout="isHoverBook(typeIndex, bookIndex, false)" @mouseover="isHoverBook(typeIndex, bookIndex, true)" class="book">
+                <div class="book"
+                    v-for="book, bookIndex in books[typeIndex]"
+                    :key="bookIndex"
+                    @click="clickBook(book.id)"
+                    @mouseout="isHoverBook(typeIndex, bookIndex, false)"
+                    @mouseover="isHoverBook(typeIndex, bookIndex, true)">
                 <div :class="{hover: book.isHover}" class="bottom">
                     <div class="cover">
                         <img :src="book.bookPic" alt="">
@@ -34,15 +39,15 @@
                 <div class="top" :class="{bookHover: book.isHover}">
                     <div class="score">{{book.avgScore}}</div>
                     <div class="star">
-                    <img src="../../assets/img/lack_star.png" alt="">
-                    <img :style="'clip:rect(auto,'+ book.avgScore * 84 / 5 +'px,auto,auto);'" src="../../assets/img/full_star.png" alt="">
+                        <img src="../../assets/img/lack_star.png" alt="">
+                        <img :style="'clip:rect(auto,'+ book.avgScore * 84 / 5 +'px,auto,auto);'" src="../../assets/img/full_star.png" alt="">
                     </div>
                     <div class="isFinish">{{book.isOver ? '完结' : '连载'}}</div>
                 </div>
-                <div class="book_name">
+                <div :title="book.bookName" class="book_name">
                     {{book.bookName}}
                 </div>
-                <div class="author_name">
+                <div :title="book.authorName" class="author_name">
                     {{book.authorName}}
                 </div>
                 </div>
@@ -54,7 +59,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 
 import {getSecSort, getBook} from '@/api/api';
 import getAllCategory from './common/getAllCategory.js';
@@ -82,7 +87,12 @@ export default {
         this.initConfig();
         getAllCategory(); // 为优化用户体验 提前请求分类的东西
     },
+    computed: {
+    },
     methods: {
+        ...mapMutations([
+            'CHANGE_CURRENT_BOOKID'
+        ]),
         isHoverBook(typeIndex, bookIndex, isHover) {
             this.$set(this.books[typeIndex][bookIndex], 'isHover', isHover);
         },
@@ -106,12 +116,16 @@ export default {
             this.books = books;
             this.moreLoading = false;
         },
+        clickBook(bookId) {
+            this.CHANGE_CURRENT_BOOKID(bookId);
+            this.$router.push('/book');
+        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-.sort {
+.main-sort {
     width: $width;
     margin: 20px auto;
     display: flex;
@@ -189,6 +203,7 @@ export default {
                     justify-content: center;
                     width: 125px;
                     margin: 0 1rem 20px;
+                    cursor: pointer;
                     position: relative;
                     @media screen and (max-width: 568px) {
                         margin: 0 2px 20px;
@@ -196,6 +211,9 @@ export default {
                     .book_name,
                     .author_name {
                         font-family: Hiragino Sans GB;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                     }
 
                     .book_name {
@@ -237,8 +255,9 @@ export default {
                     .top {
                         width: 100%;
                         position: absolute;
-                        height: 100%;
-                        margin-top: 20%;
+                        height: 80%;
+                        top: 0px;
+                        // margin-top: 20%;
 
                         >div {
                             position: absolute;
@@ -266,16 +285,16 @@ export default {
                             opacity: 1;
 
                             &:first-of-type {
-                                top: 10%;
+                                top: 20%;
                             }
 
                             &:nth-of-type(2) {
-                                top: 20%;
+                                top: 40%;
                                 transition-delay: .5s;
                             }
 
                             &:nth-of-type(3) {
-                                top: 40%;
+                                top: 60%;
                                 transition-delay: 1s;
                             }
                         }

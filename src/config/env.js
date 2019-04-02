@@ -12,7 +12,7 @@ let imgBaseUrl = '';
 
 
 if (process.env.NODE_ENV === 'development') {
-    baseUrl = 'http://203.195.135.253:8080';
+    baseUrl = 'http://yapi.demo.qunar.com/mock/60609';
 
 } else if (process.env.NODE_ENV === 'production') {
 	baseUrl = '//elm.cangdu.org';

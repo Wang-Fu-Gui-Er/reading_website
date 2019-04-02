@@ -44,7 +44,7 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 				return responseJson.data;
 			}
 			else {
-				throw new Error(`Opps!Error occured.Error code: ${responseJson.code}.Error msssage: ${responseJson.message}`)
+				throw new Error(`Opps!Error occured.Error url: ${url}. Error code: ${responseJson.code}.Error msssage: ${responseJson.message}`)
 			}
 		} catch (error) {
 			throw new Error(error)

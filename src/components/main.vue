@@ -23,7 +23,7 @@
               <!-- </div> -->
             </div>
         <div class="tail">
-          <template v-if="!isLogin">
+          <template v-if="!isUserLogin">
             <a @click="isLogin = true">登陆</a>
             <span class="sperate_line">
               |
@@ -43,6 +43,7 @@
     </div>
     <router-view></router-view>
     <Register v-model="isRegister"></Register>
+    <Login v-model="isLogin"></Login>
     <div class="footer">
       如有问题欢迎联系<a href="www.baidu.com">意见反馈</a>
     </div>
@@ -56,9 +57,10 @@
 </template>
 
 <script>
-let _ = require('lodash');
+const _ = require('lodash');
 
 import Register from './Register.vue';
+import Login from './Login.vue';
 // 首屏优化考虑一下
 export default {
   name: 'mainPage',
@@ -72,11 +74,13 @@ export default {
       activeIndex: '0',
       menu: ['首页', '分类', '有声书物', '分享会', '榜单'],
       isRegister: false,
-      isLogin: false
+      isLogin: false,
+      isUserLogin: false
     }
   },
   components: {
-    Register
+    Register,
+    Login
   },
   created() {
     // may change later

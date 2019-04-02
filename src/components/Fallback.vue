@@ -25,11 +25,6 @@
 import {userLogin} from '@/api/api';
 
 export default {
-    model: {
-        prop: 'isLogin',
-        event: 'closeLogin'
-    },
-    props: ['isLogin'],
     data() {
         // FIXME: 写在这里肯定有问题
         const validatePass = (rule, value, callback) => {

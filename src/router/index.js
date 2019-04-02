@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Main from '@/components/Main'
 import Content from '@/components/main/Content';
 import Sort from '@/components/main/Sort'
+import Book from '@/components/book/Book'
 Vue.use(Router)
 
 export default new Router({
@@ -20,6 +21,10 @@ export default new Router({
             {
                 path: '/sort',
                 component: Sort
+            },
+            {
+                path: '/book',
+                component: Book
             }
         ]
     }, {
