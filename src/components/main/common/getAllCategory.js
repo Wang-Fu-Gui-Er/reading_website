@@ -1,6 +1,6 @@
 import {getAllCategory} from '@/api/api';
 
-import {setStore, getStore} from '@/config/storage';
+import {setStore, getStore} from '@/common/js/storage';
 
 // import store from '@/store/';
 

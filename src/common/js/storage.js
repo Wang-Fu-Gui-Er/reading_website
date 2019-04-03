@@ -1,6 +1,7 @@
 /**
  * 存储localStorage
  */
+// localstorage 关闭浏览器后消失
 // 在想是否用session storge
 export const setStore = (name, content) => {
 	if (!name) return;

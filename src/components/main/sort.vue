@@ -30,7 +30,7 @@ import {mapState, mapActions, mapMutations} from 'vuex';
 
 // import {getAllCategory} from '@/api/api.js';
 import getAllCategory from './common/getAllCategory';
-import {getStore} from '@/config/storage'
+import {getStore} from '@/common/js/storage'
 
 export default {
     data() {
