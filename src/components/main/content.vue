@@ -211,9 +211,7 @@ export default {
                     .book_name,
                     .author_name {
                         font-family: Hiragino Sans GB;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
+                        @include single-overflow;
                     }
 
                     .book_name {

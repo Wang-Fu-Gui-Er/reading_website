@@ -133,10 +133,11 @@ export default {
   // 这个地方要调整一下
   max-width: 100vw;
   min-width: 100vw;
-  // min-width: 1000px;
+  min-width: 871px;
   .write{
     width: $width;
     margin: 0 auto;
+    // padding-bottom: 20px;
   }
   .head {
     height: 100px;

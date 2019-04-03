@@ -2,8 +2,16 @@
 $width: 85vw;
 
 $grey: #666;
+$littleGrey: #e6e6e0;
+$lightGrey: #b5b4b4;
+$anotherGrey: #5f5b5b;
+$otherGrey: #777676;
+$fontTopGrey: #a6a6a4;
 $greyHover: #aaa;
 $black: black;
+$fontColor: #999;
+$green: #57ba59;
+$hoverGreen: #63d465;
 
 a {
     cursor: pointer;
@@ -18,4 +26,10 @@ img {
   vertical-align: middle;
   max-width: 100%;
   max-height: 100%;
+}
+
+@mixin single-overflow {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
