@@ -11,7 +11,13 @@ $greyHover: #aaa;
 $black: black;
 $fontColor: #999;
 $green: #57ba59;
+$darkGreen: #526652;
+$darkHoverGreen: #56A857;
 $hoverGreen: #63d465;
+
+* {
+  font-family: 'helvetica neue', helvetica, arial, 'hiragino sans gb', stheiti;
+}
 
 a {
     cursor: pointer;

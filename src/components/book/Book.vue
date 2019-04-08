@@ -49,21 +49,29 @@
                     <div class="book-chapter">
                         <header>目录(共{{book.chapNum}}章)</header>
                         <div class="book-chapter-content">
-                            <div class="chapter" v-for="item in curChapter" :key="item.id">
-                                <!-- 第{{chapterZero}}{{item}} -->
+                            <div class="chapter left-green" v-for="item, index in curChapter" :key="item.id">
+                                第{{index === (curChapter - 1) ?  chapterZero : chapterZero.slice(0, -1)}}{{item.sequence}}章: {{item.title}}
                             </div>
                         </div>
                         <div class="book-basic-pager">
                             <el-pagination
                                 layout="total, prev, pager, next"
-                                :total="chapterLength">
+                                :total="chapterLength"
+                                @current-change="getCurChapter"
+                                >
                             </el-pagination>
                         </div>
                     </div>
-                    <div class="book-introduction">
-                        <header>图书简介</header>
-                        <div class="book-introduction-content">
-                            {{book.bookDesc}}
+                    <div class="book-comment">
+                        <header>图书评论</header>
+                        <div class="book-comment-content">
+                            <div class="left">
+                                <div>综合评分</div>
+                                <div>{{bookGrade.avgScore}}</div>
+                            </div>
+                            <div class="right">
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -78,7 +86,7 @@
 <script>
 import { mapState } from 'vuex';
 
-import { getBookDetail, getAllChapter } from '@/api/api';
+import { getBookDetail, getAllChapter, getBookGrade } from '@/api/api';
 import getZero from '@/common/js/getZero';
 
 export default {
@@ -90,7 +98,9 @@ export default {
             chapterZero: '',
             allChapter: [],
             curChapter: [],
-            chapterLength: 0
+            bookGrade: [],
+            chapterLength: 0,
+            people: []
         }
     },
     computed: {
@@ -105,21 +115,27 @@ export default {
         async initConfig() {
             const bookDetail = await getBookDetail({bookId: this.curBookId});
             const allChapter = await getAllChapter({bookId: this.curBookId});
+            let bookGrade = await getBookGrade({bookId: this.curBookId});
+            bookGrade.avgScore = bookGrade.avgScore.toFixed(1)
+            console.log(bookGrade);
             const chapterLength = allChapter.length;
-            // console.log(chapterLength)
-            const curChapter = chapterLength > 10 ? allChapter.map((item, index) => index < 10) : allChapter;
-            const chapterZero = getZero(chapterLength);
             this.book = bookDetail;
             this.allChapter = allChapter;
+            this.chapterLength = chapterLength;
+            this.bookGrade = bookGrade;
+            this.getCurChapter();
+        },
+        getCurChapter(curPage = 1, chapterLength = this.chapterLength, allChapter = this.allChapter) {
+            const curChapter = allChapter.filter((item, index) => index >= (curPage - 1) * 10 && index < curPage * 10);
+            const chapterZero = getZero(chapterLength, curChapter[0]);
             this.curChapter = curChapter;
             this.chapterZero = chapterZero;
-            this.chapterLength = chapterLength;
         }
     }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     .book-detail {
         background: #FFFFFA;
         .book-detail-container {
@@ -130,6 +146,7 @@ export default {
             .container-left {
                 flex: 3;
                 padding: 0 30px;
+                color: $grey;
                 .book-content {
                     display: flex;
                     .left {
@@ -247,16 +264,24 @@ export default {
                         }
                     }
                     .left-green {
-                        border-left: 3px solid $green;
+                        position: relative;
+                        padding-left: 5px;
+                        &::after {
+                            content: '';
+                            border-radius: 1px;
+                            width: 4px;
+                            height: 17px;
+                            background-color: $green;
+                            position: absolute;
+                            left: -3px;
+                            top: 50%;
+                            transform: translateY(-50%);
+                        }
                     }
                     > div:not(:first-of-type) {
                         padding-top: 30px;
                         header {
-                            padding: 2px 0 5px 5px;
-                            height: 22px;
-                            line-height: 22px;
-                            // margin-bottom: 3px;
-                            // padding-left: 5px;
+                            margin-bottom: 5px;
                         }
                         .book-introduction-content {
                             text-indent: 2em;
@@ -264,14 +289,33 @@ export default {
                     }
                     .book-chapter {
                         header {
+                            padding: 5px 0;
                             border-bottom: 1px solid $littleGrey;
                         }
                         .book-chapter-content {
                             .chapter {
-                                // overflow: hidden;
-                                // white-space: nowrap;
                                 width: 40em;
-                                @include single-overflow;
+                                padding: 5px 0 5px 3px;
+                                color: $darkGreen;
+                                cursor: pointer;
+                                &:hover {
+                                    color: $darkHoverGreen;
+                                }
+                            }
+                        }
+                        .book-basic-pager {
+                            display: flex;
+                            justify-content: flex-end;
+                            .el-pagination button:hover {
+                                color: $green;
+                            }
+                            .el-pager {
+                                li:hover{
+                                    color: $green;
+                                }
+                                .active {
+                                    color: $green;
+                                }
                             }
                         }
                     }

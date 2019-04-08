@@ -1,6 +1,7 @@
-export default function (num) {
+export default function (num, example) {
     let curNum = new String(num);
-    let length = curNum.length - 1;
+    let curInt = new String(num);
+    let length = curNum.length - curInt.length;
     let count = 0;
     let zeroStr = '';
     while(length-- > 0) {

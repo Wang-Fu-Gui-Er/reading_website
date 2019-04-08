@@ -19,3 +19,5 @@ export const userLogin = param => fetch('/user/login', param, 'POST');
 // 获取图书详情
 export const getBookDetail = param => fetch('/book/getBookInfo', param);
 export const getAllChapter = param => fetch('/chapter/getAllChapter', param);
+export const getBookGrade = param => fetch('/reading/getBookGrade', param);
+
