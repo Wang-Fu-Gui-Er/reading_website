@@ -9,6 +9,7 @@ export const getBook = param => fetch('/book/list/recommend', param);
 
 // 分类页
 export const getAllCategory = () => fetch('/category/getAllCategory');
+export const getAllBooks = param => fetch('/book/list/all', param);
 
 // 用户相关操作
 export const sendVerifyCode = param => fetch('/user/verifyCode/send', param);
@@ -20,4 +21,5 @@ export const userLogin = param => fetch('/user/login', param, 'POST');
 export const getBookDetail = param => fetch('/book/getBookInfo', param);
 export const getAllChapter = param => fetch('/chapter/getAllChapter', param);
 export const getBookGrade = param => fetch('/reading/getBookGrade', param);
+export const getBookCommand = param => fetch('/review/query', param, 'POST');
 

@@ -50,7 +50,7 @@
                         <header>目录(共{{book.chapNum}}章)</header>
                         <div class="book-chapter-content">
                             <div class="chapter left-green" v-for="item, index in curChapter" :key="item.id">
-                                第{{index === (curChapter - 1) ?  chapterZero : chapterZero.slice(0, -1)}}{{item.sequence}}章: {{item.title}}
+                                第{{index === (curChapter - 1) ? chapterZero : chapterZero.slice(0, -1)}}{{item.sequence}}章: {{item.title}}
                             </div>
                         </div>
                         <div class="book-basic-pager">
@@ -62,16 +62,27 @@
                             </el-pagination>
                         </div>
                     </div>
-                    <div class="book-comment">
+                    <div class="book-score">
                         <header>图书评论</header>
-                        <div class="book-comment-content">
+                        <div class="book-score-content">
                             <div class="left">
                                 <div>综合评分</div>
                                 <div>{{bookGrade.avgScore}}</div>
                             </div>
                             <div class="right">
-
+                                <div class="grade" v-for="item, index of bookGrade.gradeArr" :key="item.id">
+                                    <span class="star-num">
+                                        {{5 - index}}星
+                                    </span>
+                                    <star :score="Number(index)"></star>
+                                    <span class="star-people">
+                                        {{item}} 人
+                                    </span>
+                                </div>
                             </div>
+                        </div>
+                        <div class="command">
+
                         </div>
                     </div>
                 </div>
@@ -86,8 +97,10 @@
 <script>
 import { mapState } from 'vuex';
 
-import { getBookDetail, getAllChapter, getBookGrade } from '@/api/api';
+import { getBookDetail, getAllChapter, getBookGrade, getBookCommand } from '@/api/api';
 import getZero from '@/common/js/getZero';
+
+import star from '@/common/vue/star';
 
 export default {
     data() {
@@ -98,10 +111,16 @@ export default {
             chapterZero: '',
             allChapter: [],
             curChapter: [],
-            bookGrade: [],
             chapterLength: 0,
-            people: []
+            people: [],
+            bookGrade: {
+                avgScore: 0,
+                gradeArr: []
+            }
         }
+    },
+    components: {
+        star
     },
     computed: {
         ...mapState([
@@ -115,21 +134,25 @@ export default {
         async initConfig() {
             const bookDetail = await getBookDetail({bookId: this.curBookId});
             const allChapter = await getAllChapter({bookId: this.curBookId});
-            let bookGrade = await getBookGrade({bookId: this.curBookId});
-            bookGrade.avgScore = bookGrade.avgScore.toFixed(1)
-            console.log(bookGrade);
+            const bookGrade = await getBookGrade({bookId: this.curBookId});
             const chapterLength = allChapter.length;
             this.book = bookDetail;
             this.allChapter = allChapter;
             this.chapterLength = chapterLength;
-            this.bookGrade = bookGrade;
             this.getCurChapter();
+            this.mapBookGrade(bookGrade)
         },
         getCurChapter(curPage = 1, chapterLength = this.chapterLength, allChapter = this.allChapter) {
             const curChapter = allChapter.filter((item, index) => index >= (curPage - 1) * 10 && index < curPage * 10);
             const chapterZero = getZero(chapterLength, curChapter[0]);
             this.curChapter = curChapter;
             this.chapterZero = chapterZero;
+        },
+        mapBookGrade(bookGrade) {
+            let mapBookGrade = {};
+            mapBookGrade.avgScore = bookGrade.avgScore.toFixed(1);
+            mapBookGrade.gradeArr = Array.of(bookGrade.oneNum, bookGrade.twoNum, bookGrade.threeNum, bookGrade.fourNum, bookGrade.fiveNum);
+            this.bookGrade = mapBookGrade;
         }
     }
 }
@@ -315,6 +338,51 @@ export default {
                                 }
                                 .active {
                                     color: $green;
+                                }
+                            }
+                        }
+                    }
+                    .book-score {
+                        .book-score-content {
+                            display: flex;
+                            justify-content: space-between;
+                            font-size: 14px;
+                            > div{
+                                flex: 1;
+                            }
+                            .left {
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                justify-content: center;
+                                > div {
+                                    margin: 5px 0;
+                                }
+                            }
+                            .right {
+                                .grade {
+                                    width: 70%;
+                                    display: flex;
+                                    div {
+                                        display: inline-block;
+                                        flex: 1;
+                                    }
+                                    > span {
+                                        white-space: nowrap;
+                                        &:last-of-type {
+                                            flex: 1;
+                                        }
+                                    }
+                                    .star-img {
+                                        position: relative;
+                                        >img {
+                                            position: absolute;
+                                            left: 50%;
+                                            transform: translateX(-50%);
+                                            max-width: initial;
+                                            max-height: initial;
+                                        }
+                                    }
                                 }
                             }
                         }

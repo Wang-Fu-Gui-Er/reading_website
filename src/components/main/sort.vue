@@ -1,26 +1,40 @@
 <template>
     <div class="sort">
         <div class="sort-content">
-            <div class="menu">
-                <header>全部图书分类</header>
-                <ul class="menu-content">
-                    <li
-                        v-for="item, index in allCategory"
-                        :key="index"
-                        @mouseleave="toggleTab(index, false)"
-                        @mouseenter="toggleTab(index, true)"
-                        @click="toBook">
-                        {{item.bigCategoryDO.cateName}}
-                        <div class="secSort" v-if="item.isShow">
-                            <span v-for="secItem in item.smallCategoryList" :key="secItem.id">
-                                {{secItem.cateName}}
-                            </span>
-                        </div>
-                    </li>
-                </ul>
+            <div class="sort-left">
+                <div class="menu">
+                    <header>全部图书分类</header>
+                    <ul class="menu-content">
+                        <li
+                            v-for="item, index in allCategory"
+                            :key="index"
+                            @mouseleave="toggleTab(index, false)"
+                            @mouseenter="toggleTab(index, true)"
+                            @click="toBook">
+                            {{item.bigCategoryDO.cateName}}
+                            <div class="secSort" v-if="item.isShow">
+                                <span v-for="secItem in item.smallCategoryList" :key="secItem.id">
+                                    {{secItem.cateName}}
+                                </span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="book">
-
+            <div class="sort-right">
+                <div class="sort-book">
+                    <div class="book" v-for="item in book">
+                        <div class="book-img">
+                            <img :src="item.bookPic" alt="">
+                        </div>
+                        <div class="book-name">
+                            {{item.bookName}}
+                        </div>
+                        <div class="author-name">
+                            {{item.authorName}}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -28,7 +42,7 @@
 <script>
 import {mapState, mapActions, mapMutations} from 'vuex';
 
-// import {getAllCategory} from '@/api/api.js';
+import {getAllBooks} from '@/api/api.js';
 import getAllCategory from './common/getAllCategory';
 import {getStore} from '@/common/js/storage'
 
@@ -36,7 +50,8 @@ export default {
     data() {
         return {
             allCategory: [],
-            isShowSecSort: false
+            isShowSecSort: false,
+            book: []
         }
     },
     created() {
@@ -54,12 +69,15 @@ export default {
                 await getAllCategory();
             }
             const allCategory = getStore('allCategory');
+            let {data, page} = await getAllBooks({pageNum: 1, pageSize: 10});
+            data.map(item => item.avgScore = item.avgScore.toFixed(1));
+            this.book = data;
             this.allCategory = allCategory;
         }
     }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
     ul > li {
         list-style: none;
     }
@@ -69,6 +87,7 @@ export default {
         .sort-content {
             width: $width;
             margin: 0 auto;
+            display: flex;
             .menu {
                 width: $menuWidth;
                 background-color: rgb(245, 244, 242);
@@ -115,6 +134,21 @@ export default {
                                     text-decoration: underline;
                                 }
                             }
+                        }
+                    }
+                }
+            }
+            .sort-right {
+                flex-grow: 1;
+                margin-left: 2rem;
+                .sort-book {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, 10rem);
+                    grid-template-rows: repeat(auto-fill, 10rem);
+                    .book {
+                        .book-img {
+                            width: 5rem;
+                            height: 3rem;
                         }
                     }
                 }
