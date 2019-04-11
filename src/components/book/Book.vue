@@ -82,7 +82,29 @@
                             </div>
                         </div>
                         <div class="command">
-
+                            <div class="header">
+                                <div class="total">共有{{commandPage.totalNum}}条评论</div>
+                                <div class="sort">
+                                    <button>最新排序</button>
+                                    <button>最热排序</button>
+                                </div>
+                            </div>
+                            <div class="user">
+                                <div class="avatar">
+                                    <img src="" alt="">
+                                </div>
+                                <div class="middle">
+                                    <div class="nick">
+                                        <span></span>
+                                        <span class="data">
+                                            <!-- {{command.}} -->
+                                        </span>
+                                    </div>
+                                    <div class="user-command">
+                                        {{command.comment}}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -140,7 +162,8 @@ export default {
             this.allChapter = allChapter;
             this.chapterLength = chapterLength;
             this.getCurChapter();
-            this.mapBookGrade(bookGrade)
+            this.mapCommand();
+            this.mapBookGrade(bookGrade);
         },
         getCurChapter(curPage = 1, chapterLength = this.chapterLength, allChapter = this.allChapter) {
             const curChapter = allChapter.filter((item, index) => index >= (curPage - 1) * 10 && index < curPage * 10);
@@ -149,10 +172,19 @@ export default {
             this.chapterZero = chapterZero;
         },
         mapBookGrade(bookGrade) {
-            let mapBookGrade = {};
-            mapBookGrade.avgScore = bookGrade.avgScore.toFixed(1);
-            mapBookGrade.gradeArr = Array.of(bookGrade.oneNum, bookGrade.twoNum, bookGrade.threeNum, bookGrade.fourNum, bookGrade.fiveNum);
+            const mapBookGrade = {
+                avgScore: bookGrade.avgScore.toFixed(1),
+                gradeArr: Array.of(bookGrade.oneNum, bookGrade.twoNum, bookGrade.threeNum, bookGrade.fourNum, bookGrade.fiveNum)
+            };
             this.bookGrade = mapBookGrade;
+        },
+        async mapCommand(sort = 'time', pageNum = 1, pageSize = 10) {
+            const {data, page} = await getBookCommand({
+                bookId: this.curBookId,
+                sort, pageNum, pageSize
+            });
+            this.command = data;
+            this.commandPage = page;
         }
     }
 }

@@ -160,10 +160,12 @@ export default {
     }
   }
   .footer {
-    height: 40px;
-    line-height: 40px;
+    height: 10vh;
+    line-height: 10vh;
     text-align: center;
     color: $grey;
+    border-top: .7px solid $littleGrey;
+    background-color: $greyWhite;
     a {
       color: black;
       text-decoration: underline;

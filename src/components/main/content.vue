@@ -38,7 +38,7 @@
                 </div>
                 <div class="top" :class="{bookHover: book.isHover}">
                     <div class="score">{{book.avgScore}}</div>
-                    <star :score="book.avgScore"></star>
+                    <star :score="Number(book.avgScore)"></star>
                     <div class="isFinish">{{book.isOver ? '完结' : '连载'}}</div>
                 </div>
                 <div :title="book.bookName" class="book_name">
@@ -157,7 +157,7 @@ export default {
     min-width: 100vw;
     margin-top: 10px;
     background-color: #f6f5ee;
-
+    padding-bottom: 5vh;
     .inner-content {
         width: $width;
         margin: 0 auto;

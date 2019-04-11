@@ -8,6 +8,9 @@ $anotherGrey: #5f5b5b;
 $otherGrey: #777676;
 $fontTopGrey: #a6a6a4;
 $greyHover: #aaa;
+$greyWhite: #f5f5f5;
+
+
 $black: black;
 $fontColor: #999;
 $green: #57ba59;
@@ -17,6 +20,7 @@ $hoverGreen: #63d465;
 
 * {
   font-family: 'helvetica neue', helvetica, arial, 'hiragino sans gb', stheiti;
+  // word-break: break-all;
 }
 
 a {
@@ -38,4 +42,12 @@ img {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@mixin muti-overflow($row) {
+  overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $row;
+  -webkit-box-orient: vertical;
 }
