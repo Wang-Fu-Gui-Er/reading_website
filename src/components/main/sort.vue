@@ -24,11 +24,11 @@
             <div class="sort-right">
                 <div class="sort-book">
                     <div class="book"
-                        @mouseover="hoverBook($event, index)"
-                        @mouseout="leaveBook(index)"
                         :style="item.isHover ? 'background: #f5f5f2' : ''"
                         v-for="item, index in book" :key="item.id">
-                        <div class="book-img">
+                        <div class="book-img"
+                            @mouseover="hoverBook($event, index)"
+                            @mouseout="leaveBook(index)">
                             <img :src="item.bookPic" alt="">
                         </div>
                         <div class="book-name">
@@ -37,7 +37,7 @@
                         <div class="author-name">
                             {{item.authorName}}
                         </div>
-                        <div class="tool-tip" :class="{left: item.isEnd, show: item.isHover}">
+                        <div class="tool-tip" :class="{left: item.isEnd, show: item.isHover, 'not-show': !item.isHover}">
                             <div class="score">评分: {{item.avgScore}}</div>
                             <div class="over">
                                 {{item.isOver ? '已完结' : '连载中'}}
@@ -56,7 +56,8 @@
 import {mapState, mapActions, mapMutations} from 'vuex';
 
 import {getAllBooks} from '@/api/api.js';
-import getAllCategory from './common/getAllCategory';
+import getAllCategory from '@/common/js/getAllCategory.js';
+
 import {getStore} from '@/common/js/storage'
 
 export default {
@@ -196,7 +197,8 @@ export default {
                         }
                         .tool-tip {
                             opacity: 0;
-                            // visibility: visible;
+                            display: none;
+                            transition: all 1s;
                             display: flex;
                             flex-direction: column;
                             justify-content: center;
@@ -245,10 +247,21 @@ export default {
                                 @include muti-overflow(5);
                             }
                         }
-                        .show {
-                            opacity: 1;
+                        .not-show {
+                            display: none;
+                            opacity: 0;
                             transition: all 1s;
-                            // visibility: visible;
+                        }
+                        @keyframes display {
+                            to {
+                                opacity: 1;
+                            }
+                        }
+                        .show {
+                            animation: display .7s linear;
+                            display: initial;
+                            // opacity: 1;
+                            transition: all 1s;
                         }
                         .left {
                             left: initial;

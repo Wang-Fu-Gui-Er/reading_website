@@ -16,6 +16,7 @@ export const sendVerifyCode = param => fetch('/user/verifyCode/send', param);
 export const checkVerifyCode = param => fetch('user/verifyCode/check', param);
 export const userRegister = param => fetch('/user/register', param, 'POST');
 export const userLogin = param => fetch('/user/login', param, 'POST');
+export const userFallback = param => fetch('/advice/add', param, 'POST');
 
 // 获取图书详情
 export const getBookDetail = param => fetch('/book/getBookInfo', param);

@@ -34,7 +34,7 @@
             {{name}}
           </template>
           <span class="sperate_line">|</span>
-          <a href="">意见反馈</a>
+          <a @click="isFallback = true">意见反馈</a>
         </div>
       </div>
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
@@ -44,14 +44,15 @@
     <router-view></router-view>
     <Register v-model="isRegister"></Register>
     <Login v-model="isLogin"></Login>
+    <Fallback v-model="isFallback"></Fallback>
     <div class="footer">
-      如有问题欢迎联系<a href="www.baidu.com">意见反馈</a>
+      如有问题欢迎联系<a @click="isFallback = true">意见反馈</a>
     </div>
     <div class="sticky">
       <div class="up">
         <img src="../assets/img/up.png" alt="">
       </div>
-      <div class="text">意见反馈</div>
+      <div class="text" @click="isFallback = true">意见反馈</div>
     </div>
   </div>
 </template>
@@ -61,6 +62,7 @@ const _ = require('lodash');
 
 import Register from './Register.vue';
 import Login from './Login.vue';
+import Fallback from './Fallback.vue';
 // 首屏优化考虑一下
 export default {
   name: 'mainPage',
@@ -74,13 +76,14 @@ export default {
       activeIndex: '0',
       menu: ['首页', '分类', '有声书物', '分享会', '榜单'],
       isRegister: false,
-      isLogin: false,
-      isUserLogin: false
+      isUserLogin: false,
+      isFallback: false
     }
   },
   components: {
     Register,
-    Login
+    Login,
+    Fallback
   },
   created() {
     // may change later

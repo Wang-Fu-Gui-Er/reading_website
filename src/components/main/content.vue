@@ -59,7 +59,7 @@
 import { mapState, mapMutations } from 'vuex';
 
 import {getSecSort, getBook} from '@/api/api';
-import getAllCategory from './common/getAllCategory.js';
+import getAllCategory from '@/common/js/getAllCategory.js';
 import star from '@/common/vue/star';
 
 export default {

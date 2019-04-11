@@ -83,27 +83,43 @@
                         </div>
                         <div class="command">
                             <div class="header">
-                                <div class="total">共有{{commandPage.totalNum}}条评论</div>
-                                <div class="sort">
-                                    <button>最新排序</button>
-                                    <button>最热排序</button>
+                                <div class="total">共有{{command.page.totalNum}}条评论</div>
+                                <div class="sort" @click="changeCommandSort">
+                                    <button :class="commandSort === 'sort' ? 'select' : ''" data-sort="time">最新排序</button>
+                                    <button :class="commandSort === 'hot' ? 'select' : ''" data-sort="hot">最热排序</button>
                                 </div>
                             </div>
-                            <div class="user">
+                            <div class="user" v-for="item in command.data" :key="item.id">
                                 <div class="avatar">
-                                    <img src="" alt="">
+                                    <img :src="item.headPicPath" alt="">
                                 </div>
                                 <div class="middle">
                                     <div class="nick">
-                                        <span></span>
-                                        <span class="data">
-                                            <!-- {{command.}} -->
+                                        <span>{{item.nickName}}</span>
+                                        <span class="date">
+                                            {{item.updated}}
                                         </span>
                                     </div>
                                     <div class="user-command">
-                                        {{command.comment}}
+                                        {{item.comment}}
                                     </div>
                                 </div>
+                                <div class="like">
+                                    <div class="like-container">
+                                        <font-awesome-icon class="nice" icon="thumbs-up"></font-awesome-icon>
+                                        <span class="like-num">
+                                            {{item.likeNum}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pager">
+                                <el-pagination
+                                    layout="total, prev, pager, next"
+                                    :total="command.page.totalNum"
+                                    @current-change="mapCommand(commandSort, $event)"
+                                    >
+                                </el-pagination>
                             </div>
                         </div>
                     </div>
@@ -138,6 +154,13 @@ export default {
             bookGrade: {
                 avgScore: 0,
                 gradeArr: []
+            },
+            commandSort: 'time',
+            command: {
+                data: [],
+                page: {
+                    totalNum: 0
+                }
             }
         }
     },
@@ -179,13 +202,25 @@ export default {
             this.bookGrade = mapBookGrade;
         },
         async mapCommand(sort = 'time', pageNum = 1, pageSize = 10) {
-            const {data, page} = await getBookCommand({
+            const command = await getBookCommand({
                 bookId: this.curBookId,
                 sort, pageNum, pageSize
             });
-            this.command = data;
-            this.commandPage = page;
-        }
+            this.command = command;
+        },
+        changeCommandSort(e) {
+            const event = e.target || e.srcElement;
+            const sort = event.dataset.sort;
+            const isSelectTime = this.isSelectTime;
+            if (sort === this.commandSort) {
+                return;
+            }
+            this.mapCommand(sort);
+            this.commandSort = sort;
+        },
+        // test(e) {
+        //     console.log(e);
+        // }
     }
 }
 </script>
@@ -414,6 +449,98 @@ export default {
                                             max-width: initial;
                                             max-height: initial;
                                         }
+                                    }
+                                }
+                            }
+                        }
+                        .command {
+                            margin-top: 3vh;
+                            border-top: 1px solid $littleGrey;
+                            padding-top: 3vh;
+                            .header {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                .sort {
+                                    button {
+                                        margin: 0;
+                                        padding: 0;
+                                        border: 1px solid $butonBg;
+                                        outline: none;
+                                        padding: 3px 5px;
+                                        cursor: pointer;
+                                        &:hover {
+                                            background-color: $greyWhite;
+                                        }
+                                    }
+                                    .select {
+                                        background-color: $butonBg;
+                                    }
+                                }
+                            }
+                            .user {
+                                display: flex;
+                                padding: 5vh 0;
+                                + .user {
+                                    border-top: 1px solid $littleGrey;
+                                }
+                                .avatar {
+                                    flex: 1;
+                                    img {
+                                        width: 45px;
+                                        height: 45px;
+                                        border-radius: 50%;
+                                        overflow: hidden;
+                                    }
+                                }
+                                .middle {
+                                    flex: 5;
+                                    .nick {
+                                        font-size: 12px;
+                                    }
+                                    .date {
+                                        color: $greyHover;
+                                    }
+                                    .user-command {
+                                        margin-top: 1vh;
+                                        font-size: 14px;
+                                    }
+                                }
+                                .like {
+                                    font-size: 14px;
+                                    flex: 1;
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: flex-end;
+                                    .like-container {
+                                        display: flex;
+                                        // margin-left: 15px;
+                                        justify-content: flex-end;
+                                        .nice {
+                                            cursor: pointer;
+                                            &:hover {
+                                                color: $green;
+                                            }
+                                        }
+                                        .like-num {
+                                            padding-left: 3px;
+                                        }
+                                    }
+                                }
+                            }
+                            .pager {
+                                margin: 2vh 0 3vh;
+                                display: flex;
+                                justify-content: center;
+                                .el-pagination button:hover {
+                                    color: $green;
+                                }
+                                .el-pager {
+                                    li:hover{
+                                        color: $green;
+                                    }
+                                    .active {
+                                        color: $green;
                                     }
                                 }
                             }

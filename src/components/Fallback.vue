@@ -1,17 +1,25 @@
 <template>
     <el-dialog
-        class="login"
-        title="登陆"
-        :visible.sync="isLogin"
+        class="fallback"
+        title="意见反馈"
+        :visible.sync="isFallback"
         width="40%"
         :close-on-click-modal="false"
         :before-close="close">
-        <el-form ref="form" label-position="left" :rules="rules" :model="login" label-width="120px">
-            <el-form-item  ref="mail" label="邮箱:" prop="email">
-                <el-input v-model="login.email"></el-input>
+        <el-form ref="form" label-position="left" :rules="rules" :model="fallback" label-width="120px">
+            <el-form-item label="类型:" prop="type" required>
+                <el-select v-model="fallback.type" placeholder="请选择反馈类型">
+                    <el-option v-for="item in type" :key="item.id" :label="item.label" :value="item.value"></el-option>
+                </el-select>
             </el-form-item>
-            <el-form-item label="密码:" prop="password">
-                <el-input ref="password" type="password" v-model="login.password" autocomplete="off"></el-input>
+            <el-form-item label="标题" prop="title" required>
+                <el-input v-model="fallback.title" placeholder="请输入标题"></el-input>
+            </el-form-item>
+            <el-form-item label="详细描述:" prop="detail" required>
+                <el-input type="textarea" placeholder="请输入详细描述" v-model="fallback.detail"></el-input>
+            </el-form-item>
+            <el-form-item label="联系方式:" prop="email" required>
+                <el-input placeholder="请输入邮箱地址" v-model="fallback.email"></el-input>
             </el-form-item>
             <el-form-item class="button">
                 <el-button type="primary" @click="submitForm">提交</el-button>
@@ -22,22 +30,21 @@
 </template>
 <script>
 
-import {userLogin} from '@/api/api';
+import {userFallback} from '@/api/api';
 
 export default {
+    model: {
+        prop: 'isFallback',
+        event: 'closeDialog'
+    },
+    props: ['isFallback'],
     data() {
-        // FIXME: 写在这里肯定有问题
-        const validatePass = (rule, value, callback) => {
-            if (value !== this.$refs.password.value) {
-                callback(new Error('两次输入密码不一致!'));
-            } else {
-                callback();
-            }
-        };
         return {
-            login: {
+            fallback: {
+                type: '',
+                detail: '',
                 email: '',
-                password: '',
+                title: '',
             },
             rules: {
                 email: [
@@ -47,42 +54,49 @@ export default {
                 password: [
                     { required: true, message: '请输入密码', trigger: 'blur' },
                 ]
-            }
+            },
+            type: [{
+                label: '缺失',
+                value: 0
+            }, {
+                label: '举报',
+                value: 1
+            }, {
+                label: '建议',
+                value: 2
+            }]
         }
     },
     methods: {
         submitForm() {
             this.$refs.form.validate((valid) => {
                 if (valid) {
-                    this.loginUser();
+                    this.onFallback();
                 } else {
                     return false;
                 }
             });
         },
-        async loginUser() {
+        async onFallback() {
             const register = this.register;
             try {
-                await userLogin({
-                    email: register.email,
-                    password: register.password
-                });
+                await userFallback(this.fallback);
                 this.$message({
-                    message: '登陆成功',
+                    message: '反馈成功',
                     type: 'success'
                 });
                 this.close();
             }
             catch(err) {
                 this.$message({
-                    message: '登陆失败',
+                    message: '反馈失败',
                     type: 'error'
                 });
             }
         },
         close() {
             this.$refs.form.resetFields();
-            this.$emit('closeLogin', false);
+            this.$emit('closeDialog', false);
         }
     }
 }
