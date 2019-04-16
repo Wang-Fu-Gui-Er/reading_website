@@ -22,7 +22,11 @@
 </template>
 <script>
 
-import {userLogin} from '@/api/api';
+import { userLogin } from '@/api/api';
+
+import { mapMutations } from 'vuex';
+
+import setUserInfo from '@/common/js/setUserInfo';
 
 export default {
     model: {
@@ -55,7 +59,9 @@ export default {
             }
         }
     },
+    mixins:[setUserInfo],
     methods: {
+        ...mapMutations(['UPDATE_USERINFO']),
         submitForm() {
             this.$refs.form.validate((valid) => {
                 if (valid) {
@@ -66,16 +72,18 @@ export default {
             });
         },
         async loginUser() {
-            const register = this.register;
+            const login = this.login;
             try {
-                await userLogin({
-                    email: register.email,
-                    password: register.password
+                const userInfo = await userLogin({
+                    email: login.email,
+                    password: login.password
                 });
+                this.storageUserInfo(userInfo);
                 this.$message({
                     message: '登陆成功',
                     type: 'success'
                 });
+                this.$emit('initUserConfig');
                 this.close();
             }
             catch(err) {
@@ -91,6 +99,7 @@ export default {
         }
     }
 }
+
 </script>
 <style lang="scss">
     .login {

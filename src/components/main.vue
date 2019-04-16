@@ -22,18 +22,30 @@
                 <!-- <input type="text"> -->
               <!-- </div> -->
             </div>
-        <div class="tail">
+        <div class="tail" @mouseover="hoverUser(true)" @mouseout="hoverUser(false)">
           <template v-if="!isUserLogin">
             <a @click="isLogin = true">登陆</a>
-            <span class="sperate_line">
+            <span class="sperate-line">
               |
             </span>
             <a @click="isRegister = true">注册</a>
           </template>
           <template v-else>
-            {{name}}
+            <span class="userImage">
+              <img :src="userInfo.headPicPath" alt="">
+            </span>
+            <span class="username">
+              {{userInfo.nickName}}
+            </span>
+            <span class="arrow">
+              <font-awesome-icon icon="angle-down"></font-awesome-icon>
+            </span>
+            <div class="drop-down" :class="{show: isDrop, 'not-show': !isDrop}">
+              <div @click="$router.push('/shelf');">我的书架</div>
+              <div @click="userLogOut">退出</div>
+            </div>
           </template>
-          <span class="sperate_line">|</span>
+          <span class="sperate-line">|</span>
           <a @click="isFallback = true">意见反馈</a>
         </div>
       </div>
@@ -43,7 +55,7 @@
     </div>
     <router-view></router-view>
     <Register v-model="isRegister"></Register>
-    <Login v-model="isLogin"></Login>
+    <Login v-model="isLogin" @initUserConfig="initUserConfig"></Login>
     <Fallback v-model="isFallback"></Fallback>
     <div class="footer">
       如有问题欢迎联系<a @click="isFallback = true">意见反馈</a>
@@ -63,6 +75,9 @@ const _ = require('lodash');
 import Register from './Register.vue';
 import Login from './Login.vue';
 import Fallback from './Fallback.vue';
+
+import getUserInfo from '@/common/js/getUserInfo';
+
 // 首屏优化考虑一下
 export default {
   name: 'mainPage',
@@ -77,7 +92,8 @@ export default {
       menu: ['首页', '分类', '有声书物', '分享会', '榜单'],
       isRegister: false,
       isUserLogin: false,
-      isFallback: false
+      isFallback: false,
+      isDrop: false
     }
   },
   components: {
@@ -92,11 +108,20 @@ export default {
     const routeArr = ['', 'sort'];
     const activeIndex = routeArr.findIndex(item => item === curRoute);
     this.activeIndex = activeIndex.toString();
+
+    this.initUserConfig();
   },
+  mixins:[getUserInfo],
   mounted() {
     this.restaurants = this.loadAll();
   },
   methods: {
+    initUserConfig() {
+      const userInfo = this.getUserInfo();
+      if (userInfo && Object.keys(userInfo).length !== 0) {
+        this.isUserLogin = true;
+      }
+    },
     loadAll() {
       return []
     },
@@ -110,7 +135,7 @@ export default {
         }, 3000 * Math.random());
     },
     createStateFilter(queryString) {
-      return (state) => {
+      return state => {
         return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
@@ -125,22 +150,27 @@ export default {
       }
       this.$router.push({path});
     },
+    hoverUser(flag) {
+      if (this.isUserLogin) {
+        this.isDrop = flag;
+      }
+    },
+    userLogOut() {
+      this.clearUserInfo();
+      this.isUserLogin = false;
+    }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 
 .main {
   // 这个地方要调整一下
-  max-width: 100vw;
-  min-width: 100vw;
-  min-width: 871px;
+  min-width: 1179px;
   .write{
     width: $width;
     margin: 0 auto;
-    // padding-bottom: 20px;
   }
   .head {
     height: 100px;
@@ -160,6 +190,55 @@ export default {
       margin-top: 8px;
       float: right;
       font-size: 12px;
+      height: 25px;
+      line-height: 25px;
+      color: $grey;
+      position: relative;
+      &:hover {
+        .arrow {
+          transform: rotate(180deg);
+        }
+      }
+      .userImage {
+        display: inline-block;
+        width: 25px;
+        height: 25px;
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
+      }
+      .arrow {
+        display: inline-block;
+        height: 11px;
+        width: 7.5px;
+        line-height: 11px;
+        transform: rotateX(0deg);
+        transition: transform 1s;
+        transform-origin: center;
+      }
+      .drop-down {
+        transition: opacity 1s;
+        opacity: 0;
+        padding: 2px 8px;
+        border-radius: 3px;
+        border: .7px solid $greyHover;
+        position: absolute;
+        top: 30px;
+        > div {
+          cursor: pointer;
+          &:hover {
+            color: $fontColor;
+          }
+        }
+      }
+      .show {
+        opacity: 1;
+      }
+      .not-show {
+        opacity: 0;
+      }
     }
   }
   .footer {

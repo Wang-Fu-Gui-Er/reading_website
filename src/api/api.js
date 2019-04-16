@@ -18,6 +18,9 @@ export const userRegister = param => fetch('/user/register', param, 'POST');
 export const userLogin = param => fetch('/user/login', param, 'POST');
 export const userFallback = param => fetch('/advice/add', param, 'POST');
 
+// 用户界面
+export const queryUserInfo = email => fetch('/user/getUserInfo', email);
+
 // 获取图书详情
 export const getBookDetail = param => fetch('/book/getBookInfo', param);
 export const getAllChapter = param => fetch('/chapter/getAllChapter', param);

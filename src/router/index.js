@@ -4,6 +4,8 @@ import Main from '@/components/Main'
 import Content from '@/components/main/Content';
 import Sort from '@/components/main/Sort'
 import Book from '@/components/book/Book'
+import Shelf from '@/components/shelf/Shelf'
+
 Vue.use(Router)
 
 export default new Router({
@@ -25,6 +27,10 @@ export default new Router({
             {
                 path: '/book',
                 component: Book
+            },
+            {
+                path: '/shelf',
+                component: Shelf
             }
         ]
     }, {
