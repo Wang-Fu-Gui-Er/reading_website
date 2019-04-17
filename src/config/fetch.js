@@ -33,7 +33,10 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 
 	const accessToken = getCookie('token');
 	let param = {
-		mode: 'cors'
+		mode: 'cors',
+		headers: {
+			'content-type': 'application/json'
+		}
 	};
 	if (accessToken) {
 		param['access_token'] = accessToken;

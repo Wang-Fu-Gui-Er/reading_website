@@ -1,13 +1,95 @@
 <template>
-    
+    <div class="shelf">
+        <div class="menu">
+            <div class="introduction">
+                <div class="avatar">
+                    <img :src="userInfo.headPicPath" alt="头像">
+                </div>
+                <div class="username">
+                    {{userInfo.nickName}}
+                </div>
+            </div>
+            <div class="menu-item" v-for="item in menu" :key="item.id" :class="curTab === item.tab ? 'selected' : ''">
+                {{item.text}}
+            </div>
+        </div>
+        <div class="content">
+            <router-view></router-view>
+        </div>
+    </div>
 </template>
 
 <script>
-export default {
 
+import getUserInfo from '@/common/js/getUserInfo';
+
+export default {
+    mixins: [getUserInfo],
+    data() {
+        return {
+            curTab: 'config',
+            menu: [{
+                tab: 'config',
+                text: '个人设置'
+            }, {
+                tab: 'history',
+                text: '阅读历史'}
+            , {
+                tab: 'book',
+                text: '我的图书'
+            }, {
+                tab: 'note',
+                text: '我的笔记'
+            }, {
+                tab: 'command',
+                text: '我的书评'
+            }]
+        }
+    }
 }
 </script>
 
 <style lang="scss" scoped>
-
+    .shelf {
+        width: $width;
+        margin: 2rem auto;
+        display: flex;
+        .menu {
+            width: 20vw;
+            background-color: $greyWhite;
+            color: $grey;
+            .introduction {
+                height: 20vh;
+                padding: 30px 0 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-around;
+                .avatar {
+                    width: 120px;
+                    height: 120px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                }
+                .username {
+                    margin-top: 10px;
+                }
+            }
+            .menu-item {
+                height: 6vh;
+                line-height: 6vh;
+                text-align: center;
+                border-top: .7px solid $littleGrey;
+            }
+            .selected {
+                background-color: $tabGrey;
+                color: $greyWhite;
+            }
+        }
+        .content {
+            flex: 1;
+            margin-left: 2rem;
+            // background-color: $greyWhite;
+        }
+    }
 </style>

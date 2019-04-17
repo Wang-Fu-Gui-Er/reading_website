@@ -20,6 +20,8 @@ export const userFallback = param => fetch('/advice/add', param, 'POST');
 
 // 用户界面
 export const queryUserInfo = email => fetch('/user/getUserInfo', email);
+export const updateUserInfo = userBaseInfoDO => fetch('/user/updateUserInfo', userBaseInfoDO, 'POST');
+
 
 // 获取图书详情
 export const getBookDetail = param => fetch('/book/getBookInfo', param);

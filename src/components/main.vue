@@ -8,17 +8,17 @@
               </div>
               <!-- select返回的值设在status里面 -->
               <!-- <div class="search"> -->
-                <el-autocomplete
-                  v-model="state4"
-                  :fetch-suggestions="querySearchAsync"
-                  placeholder="请输入内容"
-                  @select="search"
-                >
+              <el-autocomplete
+                v-model="state4"
+                :fetch-suggestions="querySearchAsync"
+                placeholder="请输入内容"
+                @select="search"
+              >
                 <i
                   class="el-icon-search el-input__icon"
                   slot="suffix">
                 </i>
-                </el-autocomplete>
+              </el-autocomplete>
                 <!-- <input type="text"> -->
               <!-- </div> -->
             </div>
@@ -165,9 +165,13 @@ export default {
 
 <style lang="scss">
 
+
 .main {
   // 这个地方要调整一下
-  min-width: 1179px;
+  // min-width: 1179px;
+  > div {
+    // min-width: 800px;
+  }
   .write{
     width: $width;
     margin: 0 auto;
@@ -209,6 +213,9 @@ export default {
           border-radius: 50%;
         }
       }
+      .username {
+        margin-left: 8px;
+      }
       .arrow {
         display: inline-block;
         height: 11px;
@@ -225,6 +232,7 @@ export default {
         border-radius: 3px;
         border: .7px solid $greyHover;
         position: absolute;
+        right: 60px;
         top: 30px;
         > div {
           cursor: pointer;
@@ -242,6 +250,9 @@ export default {
     }
   }
   .footer {
+    position: absolute;
+    bottom: 0px;
+    width: 100vw;
     height: 10vh;
     line-height: 10vh;
     text-align: center;
