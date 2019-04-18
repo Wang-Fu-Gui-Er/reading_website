@@ -36,13 +36,6 @@ export default {
     props: ['isLogin'],
     data() {
         // FIXME: 写在这里肯定有问题
-        const validatePass = (rule, value, callback) => {
-            if (value !== this.$refs.password.value) {
-                callback(new Error('两次输入密码不一致!'));
-            } else {
-                callback();
-            }
-        };
         return {
             login: {
                 email: '',
@@ -63,7 +56,7 @@ export default {
     methods: {
         ...mapMutations(['UPDATE_USERINFO']),
         submitForm() {
-            this.$refs.form.validate((valid) => {
+            this.$refs.form.validate(valid => {
                 if (valid) {
                     this.loginUser();
                 } else {

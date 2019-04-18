@@ -169,6 +169,9 @@ export default {
 .main {
   // 这个地方要调整一下
   // min-width: 1179px;
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
   > div {
     // min-width: 800px;
   }
@@ -252,6 +255,8 @@ export default {
   .footer {
     position: absolute;
     bottom: 0px;
+    // display: flex;
+    // justify-content: flex-end;
     width: 100vw;
     height: 10vh;
     line-height: 10vh;

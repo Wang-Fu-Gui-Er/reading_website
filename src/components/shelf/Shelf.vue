@@ -9,7 +9,7 @@
                     {{userInfo.nickName}}
                 </div>
             </div>
-            <div class="menu-item" v-for="item in menu" :key="item.id" :class="curTab === item.tab ? 'selected' : ''">
+            <div class="menu-item" @click="changeItem(item.tab)" v-for="item in menu" :key="item.id" :class="curTab === item.tab ? 'selected' : ''">
                 {{item.text}}
             </div>
         </div>
@@ -33,8 +33,8 @@ export default {
                 text: '个人设置'
             }, {
                 tab: 'history',
-                text: '阅读历史'}
-            , {
+                text: '阅读历史'
+            }, {
                 tab: 'book',
                 text: '我的图书'
             }, {
@@ -45,6 +45,12 @@ export default {
                 text: '我的书评'
             }]
         }
+    },
+    methods: {
+        changeItem(tab) {
+            this.curTab = tab;
+            this.$route.push({name: tab});
+        }
     }
 }
 </script>
@@ -52,10 +58,10 @@ export default {
 <style lang="scss" scoped>
     .shelf {
         width: $width;
-        margin: 2rem auto;
+        margin: 2rem auto 8rem;
         display: flex;
         .menu {
-            width: 20vw;
+            width: 16rem;
             background-color: $greyWhite;
             color: $grey;
             .introduction {
@@ -80,6 +86,11 @@ export default {
                 line-height: 6vh;
                 text-align: center;
                 border-top: .7px solid $littleGrey;
+                cursor: pointer;
+                &:hover {
+                    background-color: $tabGrey;
+                    color: $greyWhite;
+                }
             }
             .selected {
                 background-color: $tabGrey;
@@ -88,7 +99,7 @@ export default {
         }
         .content {
             flex: 1;
-            margin-left: 2rem;
+            margin-left: 5rem;
             // background-color: $greyWhite;
         }
     }
