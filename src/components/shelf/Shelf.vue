@@ -35,7 +35,7 @@ export default {
                 tab: 'history',
                 text: '阅读历史'
             }, {
-                tab: 'book',
+                tab: 'myBook',
                 text: '我的图书'
             }, {
                 tab: 'note',
@@ -46,10 +46,13 @@ export default {
             }]
         }
     },
+    created() {
+        this.curTab = this.$route.name;
+    },
     methods: {
         changeItem(tab) {
             this.curTab = tab;
-            this.$route.push({name: tab});
+            this.$router.push({name: tab});
         }
     }
 }
@@ -61,9 +64,10 @@ export default {
         margin: 2rem auto 8rem;
         display: flex;
         .menu {
-            width: 16rem;
+            width: 13rem;
             background-color: $greyWhite;
             color: $grey;
+            font-size: 14px;
             .introduction {
                 height: 20vh;
                 padding: 30px 0 20px;
@@ -82,8 +86,8 @@ export default {
                 }
             }
             .menu-item {
-                height: 6vh;
-                line-height: 6vh;
+                height: 5vh;
+                line-height: 5vh;
                 text-align: center;
                 border-top: .7px solid $littleGrey;
                 cursor: pointer;
@@ -99,7 +103,7 @@ export default {
         }
         .content {
             flex: 1;
-            margin-left: 5rem;
+            margin-left: 3rem;
             // background-color: $greyWhite;
         }
     }

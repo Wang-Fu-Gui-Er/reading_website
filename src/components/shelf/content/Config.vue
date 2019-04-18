@@ -80,7 +80,7 @@
 import getUserInfo from '@/common/js/getUserInfo';
 import getBase64Image from '@/common/js/getBase64Image';
 
-import {updateUserInfo} from '@/api/api'
+import {updateUserInfo} from '@/api/api';
 
 export default {
     data() {
@@ -95,7 +95,6 @@ export default {
                 password: false
             },
             temp: {
-
             }
         }
     },

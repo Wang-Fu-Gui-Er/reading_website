@@ -7,6 +7,8 @@ import Book from '@/components/book/Book'
 
 import Shelf from '@/components/shelf/Shelf'
 import Config from '@/components/shelf/content/Config';
+import UserRead from '@/components/shelf/content/UserRead';
+import Note from '@/components/shelf/content/Note'
 
 Vue.use(Router)
 
@@ -38,6 +40,22 @@ export default new Router({
                     path: '',
                     name: 'config',
                     component: Config
+                }, {
+                    path: '/histroy',
+                    name: 'history',
+                    component: UserRead
+                }, {
+                    path: '/myBook',
+                    name: 'myBook',
+                    component: UserRead
+                }, {
+                    path: '/note',
+                    name: 'note',
+                    component: Note
+                }, {
+                    path: '/command',
+                    name: 'command',
+                    component: Note
                 }]
             }
         ]

@@ -126,8 +126,17 @@
                 </div>
             </div>
             <div class="container-right">
-                <div></div>
-                &nbsp;
+                <div class="score">
+                    <div class="avgScore">
+                        {{book.avgScore}}
+                    </div>
+                    <div class="smallCate">
+                        {{book.smallCateName}}
+                    </div>
+                </div>
+                <div class="author">
+                    <!-- <div class=""></div> -->
+                </div>
             </div>
         </div>
     </div>
@@ -161,6 +170,8 @@ export default {
                 page: {
                     totalNum: 0
                 }
+            },
+            author: {
             }
         }
     },
@@ -177,9 +188,11 @@ export default {
     },
     methods: {
         async initConfig() {
-            const bookDetail = await getBookDetail({bookId: this.curBookId});
-            const allChapter = await getAllChapter({bookId: this.curBookId});
-            const bookGrade = await getBookGrade({bookId: this.curBookId});
+            const [bookDetail, allChapter, bookGrade] = await Promise.all([
+                getBookDetail({bookId: this.curBookId}),
+                getAllChapter({bookId: this.curBookId}),
+                getBookGrade({bookId: this.curBookId})
+            ]);
             const chapterLength = allChapter.length;
             this.book = bookDetail;
             this.allChapter = allChapter;
@@ -217,10 +230,7 @@ export default {
             }
             this.mapCommand(sort);
             this.commandSort = sort;
-        },
-        // test(e) {
-        //     console.log(e);
-        // }
+        }
     }
 }
 </script>

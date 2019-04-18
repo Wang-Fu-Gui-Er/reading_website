@@ -1,9 +1,6 @@
-import fetch from '../config/fetch'
+import fetch from '@/config/fetch'
 
-/**
- * 获取图书首页
- */
-
+// 获取图书首页
 export const getSecSort = () => fetch('/category/homeSmallCategory');
 export const getBook = param => fetch('/book/list/recommend', param);
 
@@ -21,6 +18,11 @@ export const userFallback = param => fetch('/advice/add', param, 'POST');
 // 用户界面
 export const queryUserInfo = email => fetch('/user/getUserInfo', email);
 export const updateUserInfo = userBaseInfoDO => fetch('/user/updateUserInfo', userBaseInfoDO, 'POST');
+export const userHistory = param => fetch('/reading/history', param);
+export const userShelf = param => fetch('/book/list/onShelf', param);
+export const userNote = param => fetch('/notes/queryByUserId', param, 'POST');
+export const delNote = param => fetch('/notes/del', param);
+export const delCommand = param => fetch('/review/del', param);
 
 // 获取图书详情
 export const getBookDetail = param => fetch('/book/getBookInfo', param);
