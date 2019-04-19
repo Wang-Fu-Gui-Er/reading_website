@@ -6,21 +6,19 @@
               <div class="image">
                 <img src="../assets/img/logo.jpg" alt="">
               </div>
-              <!-- select返回的值设在status里面 -->
-              <!-- <div class="search"> -->
-              <el-autocomplete
-                v-model="state4"
-                :fetch-suggestions="querySearchAsync"
-                placeholder="请输入内容"
-                @select="search"
-              >
-                <i
-                  class="el-icon-search el-input__icon"
-                  slot="suffix">
-                </i>
-              </el-autocomplete>
-                <!-- <input type="text"> -->
-              <!-- </div> -->
+              <div class="select">
+                <el-input
+                  size="small"
+                  placeholder="请输入搜索内容"
+                  v-model="elmSearch.searchKey"
+                  @blur="searchBook(elmSearch)">
+                  <el-select v-model="elmSearch.searchType" slot="prepend" placeholder="请选择">
+                    <el-option label="作者" value="author"></el-option>
+                    <el-option label="图书" value="book"></el-option>
+                  </el-select>
+                  <el-button slot="append" @click="searchBook(elmSearch)" icon="el-icon-search"></el-button>
+                </el-input>
+              </div>
             </div>
         <div class="tail" @mouseover="hoverUser(true)" @mouseout="hoverUser(false)">
           <template v-if="!isUserLogin">
@@ -70,7 +68,10 @@
 </template>
 
 <script>
+
 const _ = require('lodash');
+
+import { mapMutations, mapState } from 'vuex';
 
 import Register from './Register.vue';
 import Login from './Login.vue';
@@ -83,9 +84,6 @@ export default {
   name: 'mainPage',
   data () {
     return {
-      restaurants: [],
-      state4: '',
-      timeout:  null,
       isLogin: false,
       name: '',
       activeIndex: '0',
@@ -93,7 +91,11 @@ export default {
       isRegister: false,
       isUserLogin: false,
       isFallback: false,
-      isDrop: false
+      isDrop: false,
+      elmSearch: {
+        searchType: 'book',
+        searchKey: ''
+      }
     }
   },
   components: {
@@ -111,36 +113,28 @@ export default {
 
     this.initUserConfig();
   },
-  mixins:[getUserInfo],
-  mounted() {
-    this.restaurants = this.loadAll();
+  computed: {
+    ...mapState([
+      'search'
+    ])
   },
+  mixins:[getUserInfo],
   methods: {
+    ...mapMutations([
+      'CHANGE_SEARCH'
+    ]),
     initUserConfig() {
       const userInfo = this.getUserInfo();
       if (userInfo && Object.keys(userInfo).length !== 0) {
         this.isUserLogin = true;
       }
     },
-    loadAll() {
-      return []
-    },
-    querySearchAsync(queryString, cb) {
-        var restaurants = this.restaurants;
-        var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants;
-
-        clearTimeout(this.timeout);
-        this.timeout = setTimeout(() => {
-          cb(results);
-        }, 3000 * Math.random());
-    },
-    createStateFilter(queryString) {
-      return state => {
-        return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-      };
-    },
-    search(item) {
-      // console.log(item);
+    searchBook(elmSearch) {
+      const search = this.search;
+      if (!(search.searchType === elmSearch.searchType && search.searchKey === elmSearch.searchKey)) {
+        this.CHANGE_SEARCH(elmSearch);
+      }
+      this.$router.push({name: 'search'});
     },
     handleSelect(key) {
       let menuIndex = parseInt(key);
@@ -184,6 +178,8 @@ export default {
     .left{
       float: left;
       height: 100px;
+      display: flex;
+      align-items: center;
       .image{
         width: 190px;
         // height: 100px;
@@ -191,6 +187,12 @@ export default {
             width: 80px;
         }
         display: inline-block;
+      }
+      .select {
+        // height: 30px;
+        .el-input-group__prepend {
+          width: 36px;
+        }
       }
     }
     .tail {

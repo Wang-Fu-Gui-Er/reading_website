@@ -30,3 +30,6 @@ export const getAllChapter = param => fetch('/chapter/getAllChapter', param);
 export const getBookGrade = param => fetch('/reading/getBookGrade', param);
 export const getBookCommand = param => fetch('/review/query', param, 'POST');
 export const getAuthorInfo = authorId => fetch('/author/getAuthorInfo', authorId);
+
+// 搜索页
+export const getSearchBook = param => fetch('/book/list/fuzzyQueryAll', param);

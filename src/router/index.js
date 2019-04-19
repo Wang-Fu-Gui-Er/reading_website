@@ -10,6 +10,8 @@ import Config from '@/components/shelf/content/Config';
 import UserRead from '@/components/shelf/content/UserRead';
 import Note from '@/components/shelf/content/Note'
 
+import Search from '@/components/search/Search';
+
 Vue.use(Router)
 
 export default new Router({
@@ -57,6 +59,11 @@ export default new Router({
                     name: 'command',
                     component: Note
                 }]
+            },
+            {
+                path: '/search',
+                component: Search,
+                name: 'search'
             }
         ]
     }, {

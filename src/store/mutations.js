@@ -1,13 +1,11 @@
 import {
     CHANGE_CURRENT_BOOKID,
     UPDATE_USERINFO,
-    CHANGE_USEREMAIL
+    CHANGE_USEREMAIL,
+    CHANGE_SEARCH,
 } from './mutation-types';
 
 export default {
-    // [CHANGE_ALL_CATEGORY](state, allCategory) {
-    //     state.allCategory = allCategory;
-    // }
     [CHANGE_CURRENT_BOOKID](state, curBookId) {
         state.curBookId = curBookId;
     },
@@ -16,5 +14,9 @@ export default {
     },
     [CHANGE_USEREMAIL] (state, userEmail) {
         state.userEmail = userEmail;
+    },
+    [CHANGE_SEARCH] (state, search) {
+        search['pageSize'] = 10;
+        state.search = search;
     }
 }

@@ -9,7 +9,12 @@ const state = {
 	// allCategory: [] // 为优化用户体验
 	curBookId: 0,
 	userInfo: {}, // 用户信息
-	userEmail: '' // 锚点 判断用户是否登陆
+	userEmail: '', // 锚点 判断用户是否登陆
+	search: {
+		searchType: 'book',
+		searchKey: '',
+		pageSize: 10
+	}
 }
 
 export default new Vuex.Store({
