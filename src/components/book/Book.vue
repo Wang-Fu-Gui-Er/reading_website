@@ -128,14 +128,28 @@
             <div class="container-right">
                 <div class="score">
                     <div class="avgScore">
-                        {{book.avgScore}}
+                        综合分数: {{book.avgScore.toFixed(1)}}
                     </div>
                     <div class="smallCate">
-                        {{book.smallCateName}}
+                        分类: {{book.smallCateName}}
                     </div>
                 </div>
                 <div class="author">
-                    <!-- <div class=""></div> -->
+                    <div class="avatar">
+                        <img :src="authorInfo.authorPic" alt="">
+                    </div>
+                    <div class="name">
+                        {{authorInfo.authorName}}
+                    </div>
+                    <div class="weibo">
+                        微博: {{authorInfo.weiboName}}
+                    </div>
+                    <div class="desc">
+                        简介: {{authorInfo.authorDesc}}
+                    </div>
+                    <div class="masterpiece">
+                        代表作: {{authorInfo.represenWorks}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -144,7 +158,7 @@
 <script>
 import { mapState } from 'vuex';
 
-import { getBookDetail, getAllChapter, getBookGrade, getBookCommand } from '@/api/api';
+import { getBookDetail, getAllChapter, getBookGrade, getBookCommand, getAuthorInfo } from '@/api/api';
 import getZero from '@/common/js/getZero';
 
 import star from '@/common/vue/star';
@@ -171,7 +185,7 @@ export default {
                     totalNum: 0
                 }
             },
-            author: {
+            authorInfo: {
             }
         }
     },
@@ -194,9 +208,12 @@ export default {
                 getBookGrade({bookId: this.curBookId})
             ]);
             const chapterLength = allChapter.length;
+            const authorId = bookDetail.authorId;
+            const authorInfo = await getAuthorInfo({authorId});
             this.book = bookDetail;
             this.allChapter = allChapter;
             this.chapterLength = chapterLength;
+            this.authorInfo = authorInfo;
             this.getCurChapter();
             this.mapCommand();
             this.mapBookGrade(bookGrade);
@@ -560,6 +577,32 @@ export default {
             }
             .container-right {
                 flex: 1;
+                color: $grey;
+                > div {
+                    border: .7px solid rgba(102, 102, 102, .6);
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                }
+                > div + div {
+                    margin-top: 1rem;
+                }
+                .author {
+                    padding: 1.5rem 20px 1rem;
+                    div + div {
+                        margin-top: 1vmin;
+                    }
+                    .avatar, .name, .weibo {
+                        text-align: center;
+                    }
+                    .avatar {
+                        width: 5rem;
+                        height: 5rem;
+                        margin: 0 auto;
+                        img {
+                            border-radius: 50%;
+                        }
+                    }
+                }
             }
         }
     }

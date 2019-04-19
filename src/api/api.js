@@ -29,4 +29,4 @@ export const getBookDetail = param => fetch('/book/getBookInfo', param);
 export const getAllChapter = param => fetch('/chapter/getAllChapter', param);
 export const getBookGrade = param => fetch('/reading/getBookGrade', param);
 export const getBookCommand = param => fetch('/review/query', param, 'POST');
-
+export const getAuthorInfo = authorId => fetch('/author/getAuthorInfo', authorId);
