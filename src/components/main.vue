@@ -40,6 +40,7 @@
             </span>
             <div class="drop-down" :class="{show: isDrop, 'not-show': !isDrop}">
               <div @click="$router.push('/shelf');">我的书架</div>
+              <div v-if="userInfo.isAdmin" @click="$router.push('/manage')">管理后台</div>
               <div @click="userLogOut">退出</div>
             </div>
           </template>
@@ -174,7 +175,7 @@ export default {
     margin: 0 auto;
   }
   .head {
-    height: 100px;
+    height: 120px;
     .left{
       float: left;
       height: 100px;

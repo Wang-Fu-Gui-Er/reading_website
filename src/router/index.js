@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
 import Main from '@/components/Main'
 import Content from '@/components/main/Content';
 import Sort from '@/components/main/Sort'
@@ -10,7 +11,12 @@ import Config from '@/components/shelf/content/Config';
 import UserRead from '@/components/shelf/content/UserRead';
 import Note from '@/components/shelf/content/Note'
 
+import Manage from '@/components/manage/Manage';
+import BookManage from '@/components/manage/content/bookManage/BookManage';
+import EditBook from '@/components/manage/content/bookManage/EditBook';
+
 import Search from '@/components/search/Search';
+
 
 Vue.use(Router)
 
@@ -20,7 +26,6 @@ export default new Router({
         component: Main,
         default: 'mainPage',
         children: [
-            // { path: '/:name', redirect: '/' },
             {
                 path: '',
                 name: 'mainPage',
@@ -28,10 +33,12 @@ export default new Router({
             },
             {
                 path: '/sort',
+                name: 'sort',
                 component: Sort
             },
             {
                 path: '/book',
+                name: 'book',
                 component: Book
             },
             {
@@ -58,6 +65,19 @@ export default new Router({
                     path: '/command',
                     name: 'command',
                     component: Note
+                }]
+            },
+            {
+                path: '/manage',
+                component: Manage,
+                children: [{
+                    path: '',
+                    component: BookManage,
+                    name: 'manage'
+                }, {
+                    path: 'edit',
+                    component: EditBook,
+                    name: 'edit'
                 }]
             },
             {
