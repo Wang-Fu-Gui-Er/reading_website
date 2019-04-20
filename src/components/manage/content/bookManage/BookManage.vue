@@ -67,9 +67,12 @@ export default {
         this.searchBook();
     },
     methods: {
-        async searchBook(search = this.search) {
-            const pagerType = this.pagerType;
-            const {data, page} = pagerType === 'all' ? await getAllBooks(search) : await getSearchBook(search);
+        async searchBook(pageNum) {
+            const search = this.search;
+            if (typeof pageNum === 'number') {
+                search.pageNum = pageNum;
+            }
+            const {data, page} = search.searchkey ? await getAllBooks(search) : await getSearchBook(search);
             this.book = data;
             this.page = page;
         }
