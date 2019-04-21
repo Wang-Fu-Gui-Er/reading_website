@@ -74,9 +74,9 @@ const _ = require('lodash');
 
 import { mapMutations, mapState } from 'vuex';
 
-import Register from './Register.vue';
-import Login from './Login.vue';
-import Fallback from './Fallback.vue';
+import Register from './client/Register.vue';
+import Login from './client/Login.vue';
+import Fallback from './client/Fallback.vue';
 
 import getUserInfo from '@/common/js/getUserInfo';
 

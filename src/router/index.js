@@ -2,20 +2,20 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import Main from '@/components/Main'
-import Content from '@/components/main/Content';
-import Sort from '@/components/main/Sort'
-import Book from '@/components/book/Book'
+import Content from '@/components/client/main/Content';
+import Sort from '@/components/client/main/Sort'
+import Book from '@/components/client/book/Book'
 
-import Shelf from '@/components/shelf/Shelf'
-import Config from '@/components/shelf/content/Config';
-import UserRead from '@/components/shelf/content/UserRead';
-import Note from '@/components/shelf/content/Note'
+import Shelf from '@/components/client/shelf/Shelf'
+import Config from '@/components/client/shelf/content/Config';
+import UserRead from '@/components/client/shelf/content/UserRead';
+import Note from '@/components/client/shelf/content/Note'
 
 import Manage from '@/components/manage/Manage';
 import BookManage from '@/components/manage/content/bookManage/BookManage';
 import EditBook from '@/components/manage/content/bookManage/EditBook';
 
-import Search from '@/components/search/Search';
+import Search from '@/components/client/search/Search';
 
 
 Vue.use(Router)
