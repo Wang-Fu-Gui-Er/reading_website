@@ -6,7 +6,7 @@
               <div class="image">
                 <img src="../assets/img/logo.jpg" alt="">
               </div>
-              <div class="select">
+              <div v-if="!userInfo.isAdmin" class="select">
                 <el-input
                   size="small"
                   placeholder="请输入搜索内容"
@@ -38,17 +38,16 @@
             <span class="arrow">
               <font-awesome-icon icon="angle-down"></font-awesome-icon>
             </span>
-            <div class="drop-down" :class="{show: isDrop, 'not-show': !isDrop}">
-              <div @click="$router.push('/shelf');">我的书架</div>
-              <div v-if="userInfo.isAdmin" @click="$router.push('/manage')">管理后台</div>
+            <div class="drop-down" :class="{show: isDrop, 'not-show': !isDrop, 'admin-drop': userInfo.isAdmin}">
+              <div v-if="!userInfo.isAdmin" @click="$router.push('/shelf');">我的书架</div>
               <div @click="userLogOut">退出</div>
             </div>
           </template>
-          <span class="sperate-line">|</span>
-          <a @click="isFallback = true">意见反馈</a>
+          <span v-if="!userInfo.isAdmin" class="sperate-line">|</span>
+          <a v-if="!userInfo.isAdmin" @click="isFallback = true">意见反馈</a>
         </div>
       </div>
-      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+      <el-menu v-if="!userInfo.isAdmin" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
         <el-menu-item v-for="item, index in menu" :key="index" :index="index.toString()">{{item}}</el-menu-item>
       </el-menu>
     </div>
@@ -119,6 +118,7 @@ export default {
       'search'
     ])
   },
+  inject:  ['reload'],
   mixins:[getUserInfo],
   methods: {
     ...mapMutations([
@@ -127,6 +127,9 @@ export default {
     initUserConfig() {
       const userInfo = this.getUserInfo();
       if (userInfo && Object.keys(userInfo).length !== 0) {
+        if (userInfo.isAdmin) {
+          this.$router.push({name: 'bookManage'});
+        }
         this.isUserLogin = true;
       }
     },
@@ -153,6 +156,7 @@ export default {
     userLogOut() {
       this.clearUserInfo();
       this.isUserLogin = false;
+      this.$router.push({name: 'mainPage'});
     }
   }
 }
@@ -240,12 +244,16 @@ export default {
         position: absolute;
         right: 60px;
         top: 30px;
+        width: auto;
         > div {
           cursor: pointer;
           &:hover {
             color: $fontColor;
           }
         }
+      }
+      .admin-drop {
+        right: 0px;
       }
       .show {
         opacity: 1;

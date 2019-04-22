@@ -3,6 +3,7 @@ import {
     UPDATE_USERINFO,
     CHANGE_USEREMAIL,
     CHANGE_SEARCH,
+    CHANGE_EDIT_BOOK_STATUS
 } from './mutation-types';
 
 export default {
@@ -18,5 +19,8 @@ export default {
     [CHANGE_SEARCH] (state, search) {
         search['pageSize'] = 10;
         state.search = search;
+    },
+    [CHANGE_EDIT_BOOK_STATUS](state, status) {
+        state.editBookStatus = status;
     }
 }

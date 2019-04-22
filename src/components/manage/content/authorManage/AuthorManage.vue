@@ -1,5 +1,5 @@
 <template>
-    <div class="book-manage">
+    <div class="author-manage">
         <div class="search">
             <el-input
                 size="small"
@@ -9,19 +9,16 @@
                 <el-button slot="append" @click="searchBook(search)" icon="el-icon-search"></el-button>
             </el-input>
         </div>
-        <div class="total">
-            共为你检索到{{page.totalNum}}条结果
-        </div>
         <div class="addBook">
-            <button @click="editBook('add')">添加新书</button>
+            <button @click="editBook('add')">添加作者</button>
         </div>
-        <div class="book">
-            <div class="book-item" v-for="item in book" :key="item.id">
-                <div class="book-pic">
+        <div class="author">
+            <div class="author-item" v-for="item in author" :key="item.id">
+                <div class="author-pic">
                     <img :src="item.bookPic" alt="">
                 </div>
                 <div class="content">
-                    <div class="book-name">
+                    <div class="author-name">
                         {{item.bookName}}
                     </div>
                     <div class="author-name">
@@ -47,17 +44,17 @@
 
 <script>
 
-import { getAllBooks, getSearchBook, delBook } from '@/api/api';
+import { searchAuthor, delBook } from '@/api/api';
 import { mapMutations } from 'vuex';
 
 export default {
     data() {
         return {
-            book: [],
+            author: [],
             search: {
                 pageNum: 1,
                 pageSize: 10,
-                searchType: 'book',
+                searchType: 'author',
                 searchkey: ''
             },
             page: {},
@@ -75,8 +72,8 @@ export default {
             if (typeof pageNum === 'number') {
                 search.pageNum = pageNum;
             }
-            const {data, page} = search.searchkey ? await getAllBooks(search) : await getSearchBook(search);
-            this.book = data;
+            const {data, page} = search.searchkey ? await searchAuthor() : await searchAuthor(search);
+            this.author = data;
             this.page = page;
         },
         editBook(status) {
@@ -92,8 +89,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .book-manage {
-        .addBook, .book {
+    .author-manage {
+        .addBook, .author {
             button {
                 margin: 0;
                 padding: 0;
@@ -124,15 +121,15 @@ export default {
                 background-color: $addBookGreen;
             }
         }
-        .book {
+        .author {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             grid-row-gap: 10px;
             grid-gap: 10px;
             color: $grey;
-            .book-item {
+            .author-item {
                 display: flex;
-                .book-pic {
+                .author-pic {
                     width: 6rem;
                     height: 8rem;
                 }

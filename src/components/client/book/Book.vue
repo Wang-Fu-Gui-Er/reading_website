@@ -151,6 +151,24 @@
                         代表作: {{authorInfo.represenWorks}}
                     </div>
                 </div>
+                <div class="recommand">
+                    <div class="title">
+                        相似推荐
+                    </div>
+                    <div class="recommand-item" v-for="item in recommand" :key="item.id">
+                        <div class="book-pic">
+                            <img :src="item.bookPic" alt="">
+                        </div>
+                        <div class="content">
+                            <div class="book-name">
+                                {{item.bookName}}
+                            </div>
+                            <div class="author-name">
+                                {{item.authorName}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -158,7 +176,7 @@
 <script>
 import { mapState } from 'vuex';
 
-import { getBookDetail, getAllChapter, getBookGrade, getBookCommand, getAuthorInfo } from '@/api/api';
+import { getBookDetail, getAllChapter, getBookGrade, getBookCommand, getAuthorInfo, getBookRecommnad } from '@/api/api';
 import getZero from '@/common/js/getZero';
 
 import star from '@/common/vue/star';
@@ -210,10 +228,12 @@ export default {
             const chapterLength = allChapter.length;
             const authorId = bookDetail.authorId;
             const authorInfo = await getAuthorInfo({authorId});
+            const recommand = await getBookRecommnad({smallCateId: bookDetail.smallCateId});
             this.book = bookDetail;
             this.allChapter = allChapter;
             this.chapterLength = chapterLength;
             this.authorInfo = authorInfo;
+            this.recommand = recommand;
             this.getCurChapter();
             this.mapCommand();
             this.mapBookGrade(bookGrade);
@@ -288,7 +308,6 @@ export default {
                                 }
                             }
                             .line {
-                                
                             }
                         }
                     }
@@ -600,6 +619,29 @@ export default {
                         margin: 0 auto;
                         img {
                             border-radius: 50%;
+                        }
+                    }
+                }
+                .recommand {
+                    padding: 10px 20px 25px;
+                    > div + div {
+                        margin-top: 2vh;
+                    }
+                    .title {
+                        font-size: 18px;
+                    }
+                    .recommand-item {
+                        display: flex;
+                        .book-pic {
+                            width: 5rem;
+                            height: 4rem;
+                            min-width: 5rem;
+                        }
+                        .content {
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-around;
+                            margin-left: .7rem;
                         }
                     }
                 }

@@ -46,36 +46,26 @@ import {userNote, delNote, getBookCommand} from '@/api/api';
 export default {
     data() {
         return {
-            note: []
+            note: [],
+            page: {
+            }
         }
     },
     mixins: [getUserInfo],
     created() {
-        this.getNote();
+        this.getContent();
     },
     methods: {
-        async getNote(pageNum = 0) {
+        async getContent(pageNum = 1) {
+            const routeName = this.$route.name;
             const param = {
                 pageNum,
                 pageSize: 10,
                 userId: this.userInfo.id
             };
-            let note = '';
-            if (routeName === 'note') {
-                note = await userNote(param);
-            }
-            else if (routeName === 'command') {
-                note = await getBookCommand(param);
-            }
-            this.note = note;
-        },
-        delThis(noteId) {
-            if (routeName === 'note') {
-                delNote(noteId);
-            }
-            else if (routeName === 'command') {
-                delCommand(noteId);
-            }
+            const {data, page} = routeName === 'history' ? await userHistory(param) : await userShelf(param);
+            this.note = data;
+            this.page = page;
         }
     }
 }

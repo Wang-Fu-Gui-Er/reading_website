@@ -14,7 +14,8 @@ const state = {
 		searchType: 'book',
 		searchKey: '',
 		pageSize: 10
-	}
+	},
+	editBookStatus: 'add' // 编辑图书的状态
 }
 
 export default new Vuex.Store({

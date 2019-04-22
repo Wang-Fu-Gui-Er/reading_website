@@ -39,7 +39,7 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 		}
 	};
 	if (accessToken) {
-		param['access_token'] = accessToken;
+		param['Access-Token'] = accessToken;
 	}
 
 	if (type === 'POST') {

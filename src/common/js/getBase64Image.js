@@ -1,12 +1,4 @@
 
-/**
- * @file: Describe the file
- * @author: sunchao15@baidu.com 
- * @Date: 2019-04-17 14:15:24 
- * @Last Modified by: sunchao15
- * @Last Modified time: 2019-04-17 14:39:06
- */
-
 export default function (file) {
     const blob = new Blob([file]); // 文件转化成二进制文件
     const img = URL.createObjectURL(blob);

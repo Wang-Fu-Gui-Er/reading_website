@@ -8,10 +8,10 @@
         :before-close="close">
         <el-form ref="form" label-position="left" :rules="rules" :model="login" label-width="120px">
             <el-form-item  ref="mail" label="邮箱:" prop="email">
-                <el-input v-model="login.email"></el-input>
+                <el-input autocomplete="on" v-model="login.email"></el-input>
             </el-form-item>
             <el-form-item label="密码:" prop="password">
-                <el-input ref="password" type="password" v-model="login.password" autocomplete="off"></el-input>
+                <el-input autocomplete="on" ref="password" type="password" v-model="login.password"></el-input>
             </el-form-item>
             <el-form-item class="button">
                 <el-button type="primary" @click="submitForm">提交</el-button>

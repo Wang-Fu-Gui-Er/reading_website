@@ -258,7 +258,7 @@ export default {
                             }
                         }
                         .show {
-                            animation: display .7s linear;
+                            animation: display .7s linear forwards;
                             display: initial;
                             // opacity: 1;
                             transition: all 1s;

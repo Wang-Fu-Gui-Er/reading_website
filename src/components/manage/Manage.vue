@@ -1,7 +1,7 @@
 <template>
     <div class="manage">
         <div class="menu">
-            <div class="menu-item" v-for="item in menu" :key="item.id" :class="curTab === item.tab ? 'selected' : ''">
+            <div class="menu-item" @click="changeItem(item.tab)" v-for="item in menu" :key="item.id" :class="curTab === item.tab ? 'selected' : ''">
                 {{item.text}}
             </div>
         </div>
@@ -18,14 +18,23 @@ export default {
             curTab: 'book',
             menu: [{
                 text: '图书管理',
-                tab: 'book'
+                tab: 'bookManage'
             }, {
                 text: '作者管理',
-                tab: 'author'
+                tab: 'authorManage'
             }, {
                 text: '反馈管理',
-                tab: 'fallback'
+                tab: 'fallbackManage'
             }]
+        }
+    },
+    created() {
+        this.curTab = this.$route.name;
+    },
+    methods: {
+        changeItem(tab) {
+            this.curTab = tab;
+            this.$router.push({name: tab});
         }
     }
 }

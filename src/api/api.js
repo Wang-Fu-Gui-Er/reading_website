@@ -30,6 +30,13 @@ export const getAllChapter = param => fetch('/chapter/getAllChapter', param);
 export const getBookGrade = param => fetch('/reading/getBookGrade', param);
 export const getBookCommand = param => fetch('/review/query', param, 'POST');
 export const getAuthorInfo = authorId => fetch('/author/getAuthorInfo', authorId);
+export const getBookRecommnad = smallCateId => fetch('/book/list/similarRecommend', smallCateId);
 
 // 搜索页
 export const getSearchBook = param => fetch('/book/list/fuzzyQueryAll', param);
+
+// 管理页
+export const delBook = bookId => fetch('/book/del', bookId);
+export const searchAuthor = authorName => fetch('/author/fuzzyQueryAuthorInfo', authorName);
+export const queryAdvice = param => fetch('/advice/query', param, 'POST');
+export const changeAdvice = param => fetch('/advice/update', param, 'POST');

@@ -11,12 +11,13 @@ import Config from '@/components/client/shelf/content/Config';
 import UserRead from '@/components/client/shelf/content/UserRead';
 import Note from '@/components/client/shelf/content/Note'
 
+import Search from '@/components/client/search/Search';
+
 import Manage from '@/components/manage/Manage';
 import BookManage from '@/components/manage/content/bookManage/BookManage';
 import EditBook from '@/components/manage/content/bookManage/EditBook';
-
-import Search from '@/components/client/search/Search';
-
+import AuthorManage from '@/components/manage/content/authorManage/AuthorManage';
+import FallbackManage from '@/components/manage/content/fallbackManage/FallbackManage';
 
 Vue.use(Router)
 
@@ -73,11 +74,19 @@ export default new Router({
                 children: [{
                     path: '',
                     component: BookManage,
-                    name: 'manage'
+                    name: 'bookManage'
                 }, {
-                    path: 'edit',
+                    path: '/edit',
                     component: EditBook,
                     name: 'edit'
+                }, {
+                    path: '/author',
+                    component: AuthorManage,
+                    name: 'authorManage'
+                }, {
+                    path: '/fallback',
+                    component: FallbackManage,
+                    name: 'fallbackManage'
                 }]
             },
             {
