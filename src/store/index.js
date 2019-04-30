@@ -7,7 +7,6 @@ Vue.use(Vuex)
 
 const state = {
 	// allCategory: [] // 为优化用户体验
-	curBookId: 0,
 	userInfo: {}, // 用户信息
 	userEmail: '', // 锚点 判断用户是否登陆
 	search: {
@@ -15,7 +14,11 @@ const state = {
 		searchKey: '',
 		pageSize: 10
 	},
-	editBookStatus: 'add' // 编辑图书的状态
+	curBookId: 0,
+	editBookId: 0, // edit书本id
+	editAuthorId: 0,
+	editBookStatus: 'add', // 编辑图书的状态
+	editAuthorStatus: 'add'
 }
 
 export default new Vuex.Store({

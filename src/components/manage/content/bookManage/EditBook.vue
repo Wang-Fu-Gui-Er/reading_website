@@ -1,6 +1,6 @@
 <template>
     <div class="edit-book">
-        <div class="back">
+        <div class="back" @click="$router.back()">
             <img src="../../../../assets/img/return.svg" alt="返回">
         </div>
         <div class="title">
@@ -20,7 +20,8 @@
             <el-form-item label="购买地址:" prop="buyPath">
                 <el-input v-model="book.buyPath"></el-input>
             </el-form-item>
-            <el-form-item label="封面图:" prop="bookPic">
+            <el-form-item class="book-pic" label="封面图:" prop="bookPic">
+                <img :src="book.bookPic" alt="">
                 <input ref="file" type="file" accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadAvatar">
             </el-form-item>
             <el-form-item label="是否完结:" prop="isOver">
@@ -30,26 +31,23 @@
                 <el-switch v-model="book.isPublished"></el-switch>
             </el-form-item>
             <el-form-item label="分类:" prop="sort">
-                <el-select v-model="book.bigCateId" placeholder="请选择大类" @change="changeBigCate">
+                <el-select v-model="book.bigCateName" placeholder="请选择大类" @change="changeBigCate">
                     <el-option v-for="item in sortArr.bigCateArr" :key="item.id" :label="item.cateName" :value="item.id"></el-option>
                 </el-select>
                 -
-                <el-select v-model="book.smallCateId" placeholder="请选择小类">
+                <el-select v-model="book.smallCateName" placeholder="请选择小类">
                     <el-option v-for="item in sortArr.smallCateArr" :key="item.id" :label="item.cateName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="图书简介: ">
                 <el-input type="textarea" v-model="book.bookDesc"></el-input>
             </el-form-item>
-            <!-- <el-form-item label="标签:" prop="bookName">
-                <el-input v-model="book.bookName"></el-input>
-            </el-form-item> -->
-            <el-form-item label="书名:" prop="bookName">
-                <el-input v-model="book.bookName"></el-input>
+            <el-form-item label="图书地址:" prop="bookPath">
+                <input ref="file" type="file" @change="uploadBook">
+                {{book.bookPath}}
             </el-form-item>
             <el-form-item class="button">
-                <!-- <el-button type="primary" @click="submitForm">提交</el-button>
-                <el-button @click="close">取消</el-button> -->
+                <el-button size="mini" type="primary" @click="submitForm">提交</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -59,16 +57,22 @@
 
 import { mapState } from 'vuex';
 
-import { searchAuthor, getAllCategory } from '@/api/api';
-
-import getBase64Image from '@/common/js/getBase64Image';
+import { searchAuthor, getAllCategory, upload, getBookDetail, alterBook } from '@/api/api';
 
 export default {
     data() {
         return {
             book: {
-                email: '',
-                password: '',
+                bookName: null,
+                authorName: null,
+                buyPath: null,
+                isOver: false,
+                isPublished: false,
+                bigCateId: null,
+                smallCateId: null,
+                bookDesc: null,
+                bookPic: null,
+                bookPath: null
             },
             rules: {
                 email: [
@@ -87,13 +91,18 @@ export default {
         }
     },
     computed: {
-        ...mapState(['editBookStatus'])
+        ...mapState(['editBookStatus', 'editBookId'])
     },
     created() {
         this.init();
     },
     methods: {
         async init() {
+            if (this.editBookStatus === 'edit') {
+                const bookId = this.editBookId;
+                const book = await getBookDetail({bookId});
+                this.book = book;
+            }
             const allCategory = await getAllCategory();
             const bigCateArr = allCategory.map(item => item.bigCategoryDO);
             this.sortArr.allCategory = allCategory;
@@ -111,10 +120,15 @@ export default {
         },
         uploadAvatar(e) {
             const event = e.target || e.srcElement;
-            const base64Promise = getBase64Image(event.files[0]);
-            base64Promise.then(res => {
-                this.book.bookPic = res;
-            })
+            const formData = new FormData()
+            formData.append('uploadfile', event.files[0]);
+            this.book.bookPic = formData;
+        },
+        async uploadBook(e) {
+            const event = e.target || e.srcElement;
+            const uploadData = await upload({file: event.files[0], type: 'book'});
+            const bookPath = uploadData.bookPath;
+            this.book.bookPath = bookPath;
         },
         changeBigCate(bigCate) {
             const allCategory = this.sortArr.allCategory;
@@ -122,6 +136,24 @@ export default {
             const smallCateArr = smallCateItem.smallCategoryList;
             this.$set(this.book, 'smallCateId', null);
             this.sortArr.smallCateArr = smallCateArr;
+        },
+        async submitForm() {
+            const bookDO = this.book;
+            const msg = this.editBookStatus === 'edit' ? '修改' : '添加';
+            try {
+                await alterBook({bookDO});
+                this.$message({
+                    message: `${msg}成功`,
+                    type: 'success'
+                });
+                this.$router.back();
+            }
+            catch(err) {
+                this.$message({
+                    message: `${msg}失败`,
+                    type: 'error'
+                });
+            }
         }
     }
 }
@@ -135,9 +167,21 @@ export default {
             color: $blue;
             width: 1.5rem;
             height: 1.5rem;
+            cursor: pointer;
             img {
                 color: $blue;
             }
+        }
+        .book-pic {
+            img {
+                width: 6rem;
+                height: 8rem;
+            }
+        }
+        .title {
+            margin: 20px 0;
+            font-size: 18px;
+            font-weight: bold;
         }
     }
 </style>

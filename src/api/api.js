@@ -40,3 +40,7 @@ export const delBook = bookId => fetch('/book/del', bookId);
 export const searchAuthor = authorName => fetch('/author/fuzzyQueryAuthorInfo', authorName);
 export const queryAdvice = param => fetch('/advice/query', param, 'POST');
 export const changeAdvice = param => fetch('/advice/update', param, 'POST');
+export const upload = param => fetch('/transport/upload', param, 'POST'); // 上传接口
+export const alterBook = param => fetch('/book/addOrUpdateBook', param, 'POST');
+export const updateChapter = chapter => fetch('/chapter/updateChapterInfo', chapter, 'POST');
+export const delAuthor = authorId => fetch('/author/del', authorId);

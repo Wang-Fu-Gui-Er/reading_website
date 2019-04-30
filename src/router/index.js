@@ -16,7 +16,10 @@ import Search from '@/components/client/search/Search';
 import Manage from '@/components/manage/Manage';
 import BookManage from '@/components/manage/content/bookManage/BookManage';
 import EditBook from '@/components/manage/content/bookManage/EditBook';
+import EditChapter from '@/components/manage/content/bookManage/EditChapter';
+
 import AuthorManage from '@/components/manage/content/authorManage/AuthorManage';
+import EditAuthor from '@/components/manage/content/authorManage/EditAuthor';
 import FallbackManage from '@/components/manage/content/fallbackManage/FallbackManage';
 
 Vue.use(Router)
@@ -33,17 +36,17 @@ export default new Router({
                 component: Content
             },
             {
-                path: '/sort',
+                path: 'sort',
                 name: 'sort',
                 component: Sort
             },
             {
-                path: '/book',
+                path: 'book',
                 name: 'book',
                 component: Book
             },
             {
-                path: '/shelf',
+                path: 'shelf',
                 component: Shelf,
                 default: 'config',
                 children: [{
@@ -51,46 +54,54 @@ export default new Router({
                     name: 'config',
                     component: Config
                 }, {
-                    path: '/histroy',
+                    path: 'histroy',
                     name: 'history',
                     component: UserRead
                 }, {
-                    path: '/myBook',
+                    path: 'myBook',
                     name: 'myBook',
                     component: UserRead
                 }, {
-                    path: '/note',
+                    path: 'note',
                     name: 'note',
                     component: Note
                 }, {
-                    path: '/command',
+                    path: 'command',
                     name: 'command',
                     component: Note
                 }]
             },
             {
-                path: '/manage',
+                path: 'manage',
                 component: Manage,
                 children: [{
                     path: '',
                     component: BookManage,
                     name: 'bookManage'
                 }, {
-                    path: '/edit',
+                    path: 'editBook',
                     component: EditBook,
-                    name: 'edit'
+                    name: 'editBook'
                 }, {
-                    path: '/author',
+                    path: 'editChapter',
+                    component: EditChapter,
+                    name: 'editChapter'
+                }, {
+                    path: 'author',
                     component: AuthorManage,
                     name: 'authorManage'
                 }, {
-                    path: '/fallback',
+                    path: 'editAuthor',
+                    component: EditAuthor,
+                    name: 'editAuthor'
+                }, {
+                    path: 'fallback',
                     component: FallbackManage,
                     name: 'fallbackManage'
                 }]
             },
             {
-                path: '/search',
+                path: 'search',
                 component: Search,
                 name: 'search'
             }

@@ -78,7 +78,6 @@
 
 <script>
 import getUserInfo from '@/common/js/getUserInfo';
-import getBase64Image from '@/common/js/getBase64Image';
 
 import {updateUserInfo} from '@/api/api';
 
@@ -99,6 +98,7 @@ export default {
         }
     },
     mixins: [getUserInfo],
+    inject: ['reload'],
     created() {
         const userInfo = this.getUserInfo();
         this.userBaseInfoDO = userInfo;
@@ -139,16 +139,17 @@ export default {
             }
             return [isValid, msg];
         },
-        uploadChange(item) {
+        async uploadChange(item) {
             const [isValid, msg] = this.validator(item);
             if (isValid) {
                 this.userBaseInfoDO[item] = this.temp[item]
-                updateUserInfo({userBaseInfoDO: this.userBaseInfoDO});
+                await updateUserInfo({userBaseInfoDO: this.userBaseInfoDO});
                 this.isEdit[item] = false;
                 this.$message({
                     message: '更新用户信息成功',
                     type: 'success'
                 });
+                this.reload();
             }
             else {
                 this.$message({
@@ -159,11 +160,10 @@ export default {
         },
         uploadAvatar(e) {
             const event = e.target || e.srcElement;
-            const base64Promise = getBase64Image(event.files[0]);
-            base64Promise.then(res => {
-                this.temp.headPicPath = res;
-                this.uploadChange('headPicPath');
-            })
+            const formData = new FormData()
+            formData.append('uploadfile', event.files[0]);
+            this.temp.headPicPath = formData;
+            this.uploadChange('headPicPath');
         },
         notChangeItem(item) {
             this.temp[item] = this.userBaseInfoDO[item];

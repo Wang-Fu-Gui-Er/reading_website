@@ -119,7 +119,7 @@ export default {
         },
         clickBook(bookId) {
             this.CHANGE_CURRENT_BOOKID(bookId);
-            this.$router.push('/book');
+            this.$router.push('book');
         }
     }
 }

@@ -3,7 +3,10 @@ import {
     UPDATE_USERINFO,
     CHANGE_USEREMAIL,
     CHANGE_SEARCH,
-    CHANGE_EDIT_BOOK_STATUS
+    CHANGE_EDIT_BOOK_STATUS,
+    CHANGE_EDIT_BOOK_ID,
+    CHANGE_EDIT_AUTHOR_STATUS,
+    CHANGE_EDIT_AUTHOR_ID
 } from './mutation-types';
 
 export default {
@@ -22,5 +25,14 @@ export default {
     },
     [CHANGE_EDIT_BOOK_STATUS](state, status) {
         state.editBookStatus = status;
+    },
+    [CHANGE_EDIT_BOOK_ID] (state, id) {
+        state.editBookId = id;
+    },
+    [CHANGE_EDIT_AUTHOR_STATUS] (state, status) {
+        state.editAuthorStatus = status;
+    },
+    [CHANGE_EDIT_AUTHOR_ID] (state, id) {
+        state.editAuthorId = id;
     }
 }

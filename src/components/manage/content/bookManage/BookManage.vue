@@ -28,8 +28,9 @@
                         {{item.authorName}}
                     </div>
                     <div class="alter">
-                        <button @click="editBook('edit')">修改</button>
-                        <button @click="deleteBook(item.id)">删除</button>
+                        <button @click="editBook('edit', item.id)">修改图书</button>
+                        <button @click="editChapter(item.id)">修改章节</button>
+                        <button @click="deleteBook(item.id)">删除图书</button>
                     </div>
                 </div>
             </div>
@@ -69,7 +70,7 @@ export default {
     },
     inject:  ['reload'],
     methods: {
-        ...mapMutations(['CHANGE_EDIT_BOOK_STATUS']),
+        ...mapMutations(['CHANGE_EDIT_BOOK_STATUS', 'CHANGE_EDIT_BOOK_ID']),
         async searchBook(pageNum) {
             const search = this.search;
             if (typeof pageNum === 'number') {
@@ -79,9 +80,16 @@ export default {
             this.book = data;
             this.page = page;
         },
-        editBook(status) {
+        editBook(status, bookId) {
+            if (status === 'edit') {
+                this.CHANGE_EDIT_BOOK_ID(bookId);
+            }
             this.CHANGE_EDIT_BOOK_STATUS(status);
-            this.$router.push({name: 'edit'});
+            this.$router.push('editBook');
+        },
+        editChapter(bookId) {
+            this.CHANGE_EDIT_BOOK_ID(bookId);
+            this.$router.push('editChapter');
         },
         deleteBook(id) {
             delBook({id});
@@ -133,7 +141,7 @@ export default {
             .book-item {
                 display: flex;
                 .book-pic {
-                    width: 6rem;
+                    width: 8rem;
                     height: 8rem;
                 }
                 .content {
@@ -142,6 +150,12 @@ export default {
                     flex-direction: column;
                     justify-content: center;
                     // align-items: center;
+                    .alter {
+                        button + button {
+                            margin-right: 2px;
+                            margin-top: 2px;
+                        }
+                    }
                 }
             }
         }

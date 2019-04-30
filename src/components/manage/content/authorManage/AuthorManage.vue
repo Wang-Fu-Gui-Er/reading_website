@@ -4,84 +4,64 @@
             <el-input
                 size="small"
                 placeholder="请输入搜索内容"
-                v-model="search.searchKey"
-                @blur="searchBook(search)">
-                <el-button slot="append" @click="searchBook(search)" icon="el-icon-search"></el-button>
+                v-model="authorName"
+                @blur="searchAuthor(authorName)">
+                <el-button slot="append" @click="searchAuthor(authorName)" icon="el-icon-search"></el-button>
             </el-input>
         </div>
         <div class="addBook">
-            <button @click="editBook('add')">添加作者</button>
+            <button @click="edit('add')">添加作者</button>
         </div>
         <div class="author">
             <div class="author-item" v-for="item in author" :key="item.id">
                 <div class="author-pic">
-                    <img :src="item.bookPic" alt="">
+                    <img :src="item.authorPic" alt="">
                 </div>
                 <div class="content">
-                    <div class="author-name">
-                        {{item.bookName}}
-                    </div>
                     <div class="author-name">
                         {{item.authorName}}
                     </div>
                     <div class="alter">
-                        <button @click="editBook('edit')">修改</button>
-                        <button @click="deleteBook(item.id)">删除</button>
+                        <button @click="edit('edit', item.id)">修改</button>
+                        <button @click="delAuthor(item.id)">删除</button>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="pager">
-            <el-pagination
-                layout="total, prev, pager, next"
-                :total="page.totalNum"
-                @current-change="searchBook"
-                >
-            </el-pagination>
         </div>
     </div>
 </template>
 
 <script>
 
-import { searchAuthor, delBook } from '@/api/api';
+import { searchAuthor, delAuthor } from '@/api/api';
 import { mapMutations } from 'vuex';
 
 export default {
     data() {
         return {
             author: [],
-            search: {
-                pageNum: 1,
-                pageSize: 10,
-                searchType: 'author',
-                searchkey: ''
-            },
-            page: {},
-            pagerType: 'all',
+            authorName: ''
         }
     },
     created() {
-        this.searchBook();
+        this.searchAuthor();
     },
     inject:  ['reload'],
     methods: {
-        ...mapMutations(['CHANGE_EDIT_BOOK_STATUS']),
-        async searchBook(pageNum) {
-            const search = this.search;
-            if (typeof pageNum === 'number') {
-                search.pageNum = pageNum;
+        ...mapMutations(['CHANGE_EDIT_AUTHOR_STATUS', 'CHANGE_EDIT_AUTHOR_ID']),
+        async searchAuthor(authorName = this.authorName) {
+            const author = await searchAuthor({authorName});
+            this.author = author;
+        },
+        edit(status, authorId) {
+            if (status === 'edit') {
+                this.CHANGE_EDIT_AUTHOR_ID(authorId);
             }
-            const {data, page} = search.searchkey ? await searchAuthor() : await searchAuthor(search);
-            this.author = data;
-            this.page = page;
+            this.CHANGE_EDIT_AUTHOR_STATUS(status);
+            this.$router.push({name: 'editAuthor'});
         },
-        editBook(status) {
-            this.CHANGE_EDIT_BOOK_STATUS(status);
-            this.$router.push({name: 'edit'});
-        },
-        deleteBook(id) {
-            delBook({id});
+        delete(authorId) {
+            delAuthor({authorId});
             this.reload();
         }
     }
@@ -122,16 +102,20 @@ export default {
             }
         }
         .author {
+            margin-top: 2vh;
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             grid-row-gap: 10px;
-            grid-gap: 10px;
+            grid-gap: 30px;
             color: $grey;
             .author-item {
                 display: flex;
                 .author-pic {
-                    width: 6rem;
-                    height: 8rem;
+                    width: 3rem;
+                    height: 3rem;
+                    img {
+                        border-radius: 50%;
+                    }
                 }
                 .content {
                     margin-left: 1rem;
@@ -140,13 +124,6 @@ export default {
                     justify-content: center;
                     // align-items: center;
                 }
-            }
-        }
-        .pager {
-            margin-top: 3vh;
-            text-align: center;
-            .el-pagination {
-                display: inline-block;
             }
         }
     }

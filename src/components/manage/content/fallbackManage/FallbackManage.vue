@@ -44,7 +44,7 @@
             <el-pagination
                 layout="total, prev, pager, next"
                 :total="page.totalNum"
-                @current-change="searchBook"
+                @current-change="searchFallback"
                 >
             </el-pagination>
         </div>
