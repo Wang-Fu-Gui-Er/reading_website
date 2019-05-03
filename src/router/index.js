@@ -6,6 +6,8 @@ import Content from '@/components/client/main/Content';
 import Sort from '@/components/client/main/Sort'
 import Book from '@/components/client/book/Book'
 
+import Read from '@/components/client/read/Read';
+
 import Shelf from '@/components/client/shelf/Shelf'
 import Config from '@/components/client/shelf/content/Config';
 import UserRead from '@/components/client/shelf/content/UserRead';
@@ -106,6 +108,10 @@ export default new Router({
                 name: 'search'
             }
         ]
+    }, {
+        path: '/read',
+        name: 'read',
+        component: Read
     }, {
         path: '*',
         redirect: {

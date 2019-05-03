@@ -14,6 +14,7 @@ const state = {
 		searchKey: '',
 		pageSize: 10
 	},
+	chapter: [], // 章节
 	curBookId: 0,
 	editBookId: 0, // edit书本id
 	editAuthorId: 0,

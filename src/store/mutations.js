@@ -6,7 +6,8 @@ import {
     CHANGE_EDIT_BOOK_STATUS,
     CHANGE_EDIT_BOOK_ID,
     CHANGE_EDIT_AUTHOR_STATUS,
-    CHANGE_EDIT_AUTHOR_ID
+    CHANGE_EDIT_AUTHOR_ID,
+    SET_CHAPTER
 } from './mutation-types';
 
 export default {
@@ -34,5 +35,8 @@ export default {
     },
     [CHANGE_EDIT_AUTHOR_ID] (state, id) {
         state.editAuthorId = id;
+    },
+    [SET_CHAPTER] (state, chapter) {
+        state.chapter = chapter;
     }
 }

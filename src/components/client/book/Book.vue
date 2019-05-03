@@ -32,7 +32,7 @@
                         </div>
                         <div class="right-bottom">
                             <div>加入书架</div>
-                            <div>开始阅读</div>
+                            <div @click="$router.push(`read?bookId=${curBookId}&chapterIndex=0`)">开始阅读</div>
                         </div>
                     </div>
                 </div>
@@ -173,13 +173,16 @@
         </div>
     </div>
 </template>
+
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 
 import { getBookDetail, getAllChapter, getBookGrade, getBookCommand, getAuthorInfo, getBookRecommnad } from '@/api/api';
 import getZero from '@/common/js/getZero';
 
 import star from '@/common/vue/star';
+
+import { setStore } from '@/common/js/storage';
 
 export default {
     data() {
@@ -204,22 +207,23 @@ export default {
                 }
             },
             authorInfo: {
-            }
+            },
+            curBookId: 0
         }
     },
     components: {
         star
     },
     computed: {
-        ...mapState([
-            'curBookId'
-        ])
     },
     created() {
+        this.curBookId = this.$route.query.bookId;
         this.initConfig();
     },
     methods: {
+        ...mapMutations(['SET_CHAPTER']),
         async initConfig() {
+
             const [bookDetail, allChapter, bookGrade] = await Promise.all([
                 getBookDetail({bookId: this.curBookId}),
                 getAllChapter({bookId: this.curBookId}),
@@ -229,14 +233,19 @@ export default {
             const authorId = bookDetail.authorId;
             const authorInfo = await getAuthorInfo({authorId});
             const recommand = await getBookRecommnad({smallCateId: bookDetail.smallCateId});
+
             this.book = bookDetail;
             this.allChapter = allChapter;
             this.chapterLength = chapterLength;
             this.authorInfo = authorInfo;
             this.recommand = recommand;
+
             this.getCurChapter();
             this.mapCommand();
             this.mapBookGrade(bookGrade);
+
+            this.SET_CHAPTER(allChapter);
+            setStore('chapter', allChapter);
         },
         getCurChapter(curPage = 1, chapterLength = this.chapterLength, allChapter = this.allChapter) {
             const curChapter = allChapter.filter((item, index) => index >= (curPage - 1) * 10 && index < curPage * 10);

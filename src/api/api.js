@@ -44,3 +44,6 @@ export const upload = param => fetch('/transport/upload', param, 'POST'); // 上
 export const alterBook = param => fetch('/book/addOrUpdateBook', param, 'POST');
 export const updateChapter = chapter => fetch('/chapter/updateChapterInfo', chapter, 'POST');
 export const delAuthor = authorId => fetch('/author/del', authorId);
+
+// 阅读页
+export const getChapterContent = chapterPath => fetch('/transport/getChapterContent', chapterPath);

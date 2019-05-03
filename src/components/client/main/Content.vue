@@ -28,7 +28,7 @@
                 <div class="book"
                     v-for="book, bookIndex in books[typeIndex]"
                     :key="bookIndex"
-                    @click="clickBook(book.id)"
+                    @click="$router.push(`book?bookId=${book.id}`)"
                     @mouseout="isHoverBook(typeIndex, bookIndex, false)"
                     @mouseover="isHoverBook(typeIndex, bookIndex, true)">
                 <div :class="{hover: book.isHover}" class="bottom">
@@ -91,9 +91,6 @@ export default {
     computed: {
     },
     methods: {
-        ...mapMutations([
-            'CHANGE_CURRENT_BOOKID'
-        ]),
         isHoverBook(typeIndex, bookIndex, isHover) {
             this.$set(this.books[typeIndex][bookIndex], 'isHover', isHover);
         },
@@ -116,10 +113,6 @@ export default {
             this.sort = sort;
             this.books = books;
             this.moreLoading = false;
-        },
-        clickBook(bookId) {
-            this.CHANGE_CURRENT_BOOKID(bookId);
-            this.$router.push('book');
         }
     }
 }
