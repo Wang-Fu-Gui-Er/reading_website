@@ -18,8 +18,7 @@ export const userFallback = param => fetch('/advice/add', param, 'POST');
 // 用户界面
 export const queryUserInfo = email => fetch('/user/getUserInfo', email);
 export const updateUserInfo = userBaseInfoDO => fetch('/user/updateUserInfo', userBaseInfoDO, 'POST');
-export const userHistory = param => fetch('/reading/history', param);
-export const userShelf = param => fetch('/book/list/onShelf', param);
+export const getUserBook = param => fetch('/reading/history', param);
 export const userNote = param => fetch('/notes/queryByUserId', param, 'POST');
 export const delNote = param => fetch('/notes/del', param);
 export const delCommand = param => fetch('/review/del', param);

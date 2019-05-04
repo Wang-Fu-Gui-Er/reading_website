@@ -249,6 +249,10 @@ export default {
                         position: absolute;
                         height: 80%;
                         top: 0px;
+                        .star {
+                            width: 87px;
+                            height: 19px;
+                        }
                         // margin-top: 20%;
 
                         >div {

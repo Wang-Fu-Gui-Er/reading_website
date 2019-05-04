@@ -41,7 +41,7 @@
 <script>
 import getUserInfo from '@/common/js/getUserInfo';
 
-import {userNote, delNote, getBookCommand} from '@/api/api';
+import {userNote, delNote, getBookCommand, delCommand} from '@/api/api';
 
 export default {
     data() {
@@ -60,10 +60,10 @@ export default {
             const routeName = this.$route.name;
             const param = {
                 pageNum,
-                pageSize: 10,
+                pageSize: 8,
                 userId: this.userInfo.id
             };
-            const {data, page} = routeName === 'history' ? await userHistory(param) : await userShelf(param);
+            const {data, page} = routeName === 'note' ? await userNote(param) : await getBookCommand(param);
             this.note = data;
             this.page = page;
         }
@@ -77,19 +77,21 @@ export default {
             display: flex;
             font-size: 13px;
             &:not(:first-of-type) {
-                margin-top: 15px;
+                margin-top: 8vh;
             }
             .left {
-                // flex-basis: 10rem;
-                width: 10rem;
+                width: 4rem;
                 text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
                 .cover {
-                    width: 6rem;
-                    height: 8rem;
+                    width: 4rem;
+                    height: 4 / 3 * 4rem;
                 }
             }
             .right {
-                margin-left: 10px;
+                margin-left: 2rem;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -102,8 +104,9 @@ export default {
                     color: $green;
                     font-size: 16px;
                     font-weight: 800;
-                    // font-size: 10px;
-                    // width: 2px;
+                }
+                .notation {
+                    margin-top: 2vh;
                 }
                 .btn {
                     display: flex;

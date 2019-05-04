@@ -6,7 +6,7 @@
                     <header>全部图书分类</header>
                     <ul class="menu-content">
                         <li
-                            v-for="item, index in allCategory"
+                            v-for="(item, index) in allCategory"
                             :key="index"
                             @mouseleave="toggleTab(index, false)"
                             @mouseenter="toggleTab(index, true)"
@@ -25,7 +25,7 @@
                 <div class="sort-book">
                     <div class="book"
                         :style="item.isHover ? 'background: #f5f5f2' : ''"
-                        v-for="item, index in book" :key="item.id">
+                        v-for="(item, index) in book" :key="item.id">
                         <div class="book-img"
                             @mouseover="hoverBook($event, index)"
                             @mouseout="leaveBook(index)">

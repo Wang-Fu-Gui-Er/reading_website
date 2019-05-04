@@ -12,7 +12,7 @@ export default {
         getUserInfo() {
             let userInfo = this.userInfo;
             if (Object.keys(userInfo).length === 0) {
-                userInfo = JSON.parse(getCookie('userInfo'));
+                userInfo = getCookie('userInfo') && JSON.parse(getCookie('userInfo'));
                 if (!userInfo) {
                     this.getFromApi();
                     userInfo = this.userInfo;

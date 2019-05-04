@@ -73,7 +73,6 @@ export default {
         this.chapterIndex = parseInt(chapterIndex, 10);
         this.initChapter();
         this.getContent();
-        console.log(this.chapter);
     },
     computed: {
         ...mapState(['chapter']),
@@ -96,7 +95,6 @@ export default {
                 }
             }
             if (!_.isEqual(chapter, this.chapter)) {
-                // debugger;
                 this.SET_CHAPTER(chapter);
             }
         },

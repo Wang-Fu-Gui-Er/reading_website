@@ -49,10 +49,12 @@ export default {
     created() {
         this.curTab = this.$route.name;
     },
+    inject: ['reload'],
     methods: {
         changeItem(tab) {
             this.curTab = tab;
             this.$router.push({name: tab});
+            this.reload();
         }
     }
 }

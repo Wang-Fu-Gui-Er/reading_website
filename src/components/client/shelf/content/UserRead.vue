@@ -32,7 +32,7 @@
 <script>
 import getUserInfo from '@/common/js/getUserInfo';
 
-import {userHistory, userShelf} from '@/api/api';
+import { getUserBook } from '@/api/api';
 
 export default {
     data() {
@@ -52,9 +52,10 @@ export default {
             const param = {
                 pageNum,
                 pageSize: 10,
-                userId: this.userInfo.id
+                userId: this.userInfo.id,
+                isOnShelf: routeName === 'history' ? false : true
             };
-            const {data, page} = routeName === 'history' ? await userHistory(param) : await userShelf(param);
+            const {data, page} = await getUserBook(param);
             this.content = data;
             this.page = page;
         }
