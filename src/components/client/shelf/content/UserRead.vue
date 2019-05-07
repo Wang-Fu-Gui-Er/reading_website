@@ -1,7 +1,7 @@
 <template>
     <div class="user-read">
         <div class="read">
-            <div class="read-item" v-for="item in content" :key="item.id">
+            <div class="read-item" v-for="item in content" :key="item.id" @click="$router.push(`/read?bookId=${item.bookId}&chapterIndex=0`)">
                 <div class="cover">
                     <img :src="item.bookPic" alt="封面图片">
                 </div>
@@ -70,6 +70,7 @@ export default {
             grid-template-columns: 1fr 1fr;
             grid-row-gap: 1rem;
             .read-item {
+                cursor: pointer;
                 display: flex;
                 font-size: 12px;
                 .cover {

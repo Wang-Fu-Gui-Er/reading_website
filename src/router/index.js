@@ -31,8 +31,7 @@ export default new Router({
         path: '/',
         component: Main,
         default: 'mainPage',
-        children: [
-            {
+        children: [{
                 path: '',
                 name: 'mainPage',
                 component: Content

@@ -214,7 +214,7 @@ export default {
                     }
 
                     .author_name {
-                        font-size: 8px;
+                        font-size: 12px;
                     }
 
                     .bottom {

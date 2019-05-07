@@ -14,6 +14,8 @@ export const checkVerifyCode = param => fetch('user/verifyCode/check', param);
 export const userRegister = param => fetch('/user/register', param, 'POST');
 export const userLogin = param => fetch('/user/login', param, 'POST');
 export const userFallback = param => fetch('/advice/add', param, 'POST');
+export const addOrUpdateNote = param => fetch('/review/addOrUpdate', param, 'POST');
+export const queryBookNote = param => fetch('/notes/queryByUserIdAndBookId', param, 'POST');
 
 // 用户界面
 export const queryUserInfo = email => fetch('/user/getUserInfo', email);

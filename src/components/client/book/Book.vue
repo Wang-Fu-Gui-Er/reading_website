@@ -1,5 +1,5 @@
 <template>
-    <div class="book-detail">
+    <div @wheel="mouseScroll" class="book-detail">
         <div class="book-detail-container">
             <div class="container-left">
                 <div class="book-content">
@@ -7,8 +7,6 @@
                         <div class="cover">
                             <img :src="book.bookPic" alt="">
                         </div>
-                        <!-- <i class="fas fa-igloo"></i> -->
-                        <!-- <font-awesome-icon icon="heart"></font-awesome-icon> -->
                         <div class="cover-icon">
                             <font-awesome-icon :icon="['far', 'heart']"></font-awesome-icon>
                             <span class="line">|</span>
@@ -38,18 +36,18 @@
                 </div>
                 <div class="book-buttom">
                     <div class="book-menu">
-                        <span v-for="(item, index) in bookMenu" :class="bookMenuIndex === index ? 'is-select' : ''" :key="index">{{item}}</span>
+                        <a v-for="(item, index) in bookMenu" :key="index" @click="bookMenuIndex = index" :class="bookMenuIndex === index ? 'is-select' : ''" :href="`book/#${index}?bookId=${$route.query.bookId}`">{{item}}</a>
                     </div>
-                    <div class="book-introduction">
+                    <div :id="`1?bookId=${$route.query.bookId}`" ref="intro" class="book-introduction">
                         <header class="left-green">图书简介</header>
                         <div class="book-introduction-content">
                             {{book.bookDesc}}
                         </div>
                     </div>
-                    <div class="book-chapter">
+                    <div :id="`2?bookId=${$route.query.bookId}`" ref="chapter" class="book-chapter">
                         <header>目录(共{{book.chapNum}}章)</header>
                         <div class="book-chapter-content">
-                            <div class="chapter left-green" v-for="item, index in curChapter" :key="item.id">
+                            <div class="chapter left-green" v-for="(item, index) in curChapter" :key="item.id">
                                 第{{index === (curChapter - 1) ? chapterZero : chapterZero.slice(0, -1)}}{{item.sequence}}章: {{item.title}}
                             </div>
                         </div>
@@ -62,7 +60,7 @@
                             </el-pagination>
                         </div>
                     </div>
-                    <div class="book-score">
+                    <div :id="`3?bookId=${$route.query.bookId}`" ref="command" class="book-score">
                         <header>图书评论</header>
                         <div class="book-score-content">
                             <div class="left">
@@ -70,7 +68,7 @@
                                 <div>{{bookGrade.avgScore}}</div>
                             </div>
                             <div class="right">
-                                <div class="grade" v-for="item, index of bookGrade.gradeArr" :key="item.id">
+                                <div class="grade" v-for="(item, index) of bookGrade.gradeArr" :key="item.id">
                                     <span class="star-num">
                                         {{5 - index}}星
                                     </span>
@@ -233,7 +231,8 @@ export default {
             const authorId = bookDetail.authorId;
             const authorInfo = await getAuthorInfo({authorId});
             const recommand = await getBookRecommnad({smallCateId: bookDetail.smallCateId});
-
+            console.log(bookDetail)
+            console.log(this.$route)
             this.book = bookDetail;
             this.allChapter = allChapter;
             this.chapterLength = chapterLength;
@@ -276,6 +275,20 @@ export default {
             }
             this.mapCommand(sort);
             this.commandSort = sort;
+        },
+        mouseScroll() {
+            if (this.$refs.chapter.getBoundingClientRect().top < 0) {
+                if (this.$refs.command.getBoundingClientRect().top < 0) {
+                    console.log(13333);
+                    this.bookMenuIndex = 2
+                }
+                else {
+                    this.bookMenuIndex = 1;
+                }
+            }
+            else {
+                this.bookMenuIndex = 0
+            }
         }
     }
 }
@@ -283,6 +296,7 @@ export default {
 
 <style lang="scss">
     .book-detail {
+        margin-bottom: 10vh;
         background: #FFFFFA;
         .book-detail-container {
             width: $width;
@@ -394,14 +408,21 @@ export default {
                     padding: 10px 5px 5px;
                     border-top: 1px solid $littleGrey;
                     margin-top: 10px;
+                    // overflow: hidden;
+                    > div:first-of-type {
+                        position: sticky;
+                        top: 0px;
+                        // align-self: flex-start;
+                    }
                     .book-menu {
                         border-bottom: 1px solid $fontTopGrey;
-                        span {
+                        a {
                             display: inline-block;
                             width: 95px;
                             height: 35px;
                             line-height: 35px;
                             text-align: center;
+                            text-decoration: none;
                         }
                         .is-select {
                             border-bottom: 2px solid $green;
@@ -488,21 +509,17 @@ export default {
                                     div {
                                         display: inline-block;
                                         flex: 1;
+                                        img {
+                                            width: 87px;
+                                            height: 19px;
+                                        }
                                     }
                                     > span {
+                                        display: inline-block;
+                                        
                                         white-space: nowrap;
                                         &:last-of-type {
                                             flex: 1;
-                                        }
-                                    }
-                                    .star-img {
-                                        position: relative;
-                                        >img {
-                                            position: absolute;
-                                            left: 50%;
-                                            transform: translateX(-50%);
-                                            max-width: initial;
-                                            max-height: initial;
                                         }
                                     }
                                 }

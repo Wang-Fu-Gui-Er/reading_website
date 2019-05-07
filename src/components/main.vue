@@ -48,7 +48,7 @@
         </div>
       </div>
       <el-menu v-if="!userInfo.isAdmin" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item v-for="item, index in menu" :key="index" :index="index.toString()">{{item}}</el-menu-item>
+        <el-menu-item v-for="(item, index) in menu" :key="index" :index="index.toString()">{{item}}</el-menu-item>
       </el-menu>
     </div>
     <router-view></router-view>
@@ -87,7 +87,7 @@ export default {
       isLogin: false,
       name: '',
       activeIndex: '0',
-      menu: ['首页', '分类', '有声书物', '分享会', '榜单'],
+      menu: ['首页', '分类', '有声书物', '榜单', '分享会'],
       isRegister: false,
       isUserLogin: false,
       isFallback: false,
