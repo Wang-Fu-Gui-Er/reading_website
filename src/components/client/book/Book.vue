@@ -126,7 +126,7 @@
             <div class="container-right">
                 <div class="score">
                     <div class="avgScore">
-                        综合分数: {{book.avgScore.toFixed(1)}}
+                        综合分数: {{book.avgScore ? book.avgScore.toFixed(1) : 0}}
                     </div>
                     <div class="smallCate">
                         分类: {{book.smallCateName}}
@@ -204,6 +204,7 @@ export default {
                     totalNum: 0
                 }
             },
+            recommand: [],
             authorInfo: {
             },
             curBookId: 0
