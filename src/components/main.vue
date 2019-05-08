@@ -132,6 +132,7 @@ export default {
         }
         this.isUserLogin = true;
       }
+      // this.reload();
     },
     searchBook(elmSearch) {
       const search = this.search;
@@ -246,6 +247,7 @@ export default {
         top: 30px;
         width: auto;
         > div {
+          white-space: nowrap;
           cursor: pointer;
           &:hover {
             color: $fontColor;

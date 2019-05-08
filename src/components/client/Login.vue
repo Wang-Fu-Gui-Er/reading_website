@@ -53,6 +53,7 @@ export default {
         }
     },
     mixins:[setUserInfo],
+    inject: ['reload'],
     methods: {
         ...mapMutations(['UPDATE_USERINFO']),
         submitForm() {
@@ -77,6 +78,7 @@ export default {
                     type: 'success'
                 });
                 this.$emit('initUserConfig');
+                this.reload();
                 this.close();
             }
             catch(err) {

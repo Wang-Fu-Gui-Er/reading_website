@@ -8,7 +8,6 @@
             </el-button>
         </div>
     </div>
-    <!-- <block></block> -->
     <div class="yellow"
         v-loading="moreLoading"
         element-loading-text="拼命加载中"

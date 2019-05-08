@@ -29,22 +29,27 @@
                             </div>
                         </div>
                         <div class="right-bottom">
-                            <div>加入书架</div>
-                            <div @click="$router.push(`read?bookId=${curBookId}&chapterIndex=0`)">开始阅读</div>
+                            <div @click="changeShelfConfig(book.id, false)" v-if="isOnShelf">已加入书架</div>
+                            <div @click="changeShelfConfig(book.id, true)" v-else>
+                                加入书架
+                            </div>
+                            <div @click="$router.push(`/read?bookId=${curBookId}&chapterIndex=0`)">开始阅读</div>
                         </div>
                     </div>
                 </div>
-                <div class="book-buttom">
-                    <div class="book-menu">
-                        <a v-for="(item, index) in bookMenu" :key="index" @click="bookMenuIndex = index" :class="bookMenuIndex === index ? 'is-select' : ''" :href="`book/#${index}?bookId=${$route.query.bookId}`">{{item}}</a>
+                <div class="book-buttom" ref="bottom">
+                    <div class="book-menu" :class="{fixed: isFixed}">
+                        <!-- TODO: 找出bug的原因 -->
+                        <!-- <a v-for="(item, index) in bookMenu" :key="index" @click="bookMenuIndex = index" :class="bookMenuIndex === index ? 'is-select' : ''" :href="`book/#${index}?bookId=${$route.query.bookId}`">{{item}}</a> -->
+                        <a v-for="(item, index) in bookMenu" :key="index" @click="bookMenuIndex = index" :class="bookMenuIndex === index ? 'is-select' : ''" :href="`#${index}`">{{item}}</a>
                     </div>
-                    <div :id="`1?bookId=${$route.query.bookId}`" ref="intro" class="book-introduction">
+                    <div id="1" ref="intro" class="book-introduction">
                         <header class="left-green">图书简介</header>
                         <div class="book-introduction-content">
                             {{book.bookDesc}}
                         </div>
                     </div>
-                    <div :id="`2?bookId=${$route.query.bookId}`" ref="chapter" class="book-chapter">
+                    <div id="2" ref="chapter" class="book-chapter">
                         <header>目录(共{{book.chapNum}}章)</header>
                         <div class="book-chapter-content">
                             <div class="chapter left-green" v-for="(item, index) in curChapter" :key="item.id">
@@ -60,7 +65,7 @@
                             </el-pagination>
                         </div>
                     </div>
-                    <div :id="`3?bookId=${$route.query.bookId}`" ref="command" class="book-score">
+                    <div id="3" ref="command" class="book-score">
                         <header>图书评论</header>
                         <div class="book-score-content">
                             <div class="left">
@@ -87,6 +92,7 @@
                                     <button :class="commandSort === 'hot' ? 'select' : ''" data-sort="hot">最热排序</button>
                                 </div>
                             </div>
+                            <user-command :bookName="book.bookName" :bookId="book.id"></user-command>
                             <div class="user" v-for="item in command.data" :key="item.id">
                                 <div class="avatar">
                                     <img :src="item.headPicPath" alt="">
@@ -153,7 +159,7 @@
                     <div class="title">
                         相似推荐
                     </div>
-                    <div class="recommand-item" v-for="item in recommand" :key="item.id">
+                    <div class="recommand-item" v-for="item in recommand" @click="clickBook(item.id)"  :key="item.id">
                         <div class="book-pic">
                             <img :src="item.bookPic" alt="">
                         </div>
@@ -173,12 +179,16 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 
-import { getBookDetail, getAllChapter, getBookGrade, getBookCommand, getAuthorInfo, getBookRecommnad } from '@/api/api';
+import { getBookDetail, getAllChapter, getBookGrade, getBookCommand, getAuthorInfo, getBookRecommnad, checkOnShelf } from '@/api/api';
 import getZero from '@/common/js/getZero';
+import getUserInfo from '@/common/js/getUserInfo';
+import changeShelfConfig from '@/common/js/changeShelfConfig';
+import initShelf from '@/common/js/initShelf';
 
 import star from '@/common/vue/star';
+import userCommand from './userCommand';
 
 import { setStore } from '@/common/js/storage';
 
@@ -207,33 +217,37 @@ export default {
             recommand: [],
             authorInfo: {
             },
-            curBookId: 0
+            curBookId: 0,
+            isFixed: false,
         }
     },
     components: {
-        star
+        star,
+        userCommand
     },
-    computed: {
-    },
+    inject: ['reload'],
+    mixins: [getUserInfo, changeShelfConfig, initShelf],
     created() {
         this.curBookId = this.$route.query.bookId;
         this.initConfig();
     },
+    computed: {
+        ...mapState(['isOnShelf'])
+    },
     methods: {
         ...mapMutations(['SET_CHAPTER']),
+        ...mapActions(['getShelfStatus']),
         async initConfig() {
-
+            const bookId = this.curBookId
             const [bookDetail, allChapter, bookGrade] = await Promise.all([
-                getBookDetail({bookId: this.curBookId}),
-                getAllChapter({bookId: this.curBookId}),
-                getBookGrade({bookId: this.curBookId})
+                getBookDetail({bookId}),
+                getAllChapter({bookId}),
+                getBookGrade({bookId})
             ]);
             const chapterLength = allChapter.length;
             const authorId = bookDetail.authorId;
             const authorInfo = await getAuthorInfo({authorId});
             const recommand = await getBookRecommnad({smallCateId: bookDetail.smallCateId});
-            console.log(bookDetail)
-            console.log(this.$route)
             this.book = bookDetail;
             this.allChapter = allChapter;
             this.chapterLength = chapterLength;
@@ -243,6 +257,7 @@ export default {
             this.getCurChapter();
             this.mapCommand();
             this.mapBookGrade(bookGrade);
+            this.initShelf(this.userInfo, bookId);
 
             this.SET_CHAPTER(allChapter);
             setStore('chapter', allChapter);
@@ -280,7 +295,6 @@ export default {
         mouseScroll() {
             if (this.$refs.chapter.getBoundingClientRect().top < 0) {
                 if (this.$refs.command.getBoundingClientRect().top < 0) {
-                    console.log(13333);
                     this.bookMenuIndex = 2
                 }
                 else {
@@ -290,6 +304,13 @@ export default {
             else {
                 this.bookMenuIndex = 0
             }
+
+            // 这是为了修复未知原因导致的position: sticky失效问题
+            this.isFixed = this.$refs.bottom.getBoundingClientRect().top < 0 ? true : false;
+        },
+        clickBook(id) {
+            this.$router.push(`book?bookId=${id}`);
+            this.reload();
         }
     }
 }
@@ -326,7 +347,7 @@ export default {
                             align-items: center;
                             color: $otherGrey;
                             > svg {
-                                cursor: pointer;
+                                cursor: not-allowed;
                                 &:hover {
                                     color: $green;
                                 }
@@ -409,13 +430,11 @@ export default {
                     padding: 10px 5px 5px;
                     border-top: 1px solid $littleGrey;
                     margin-top: 10px;
-                    // overflow: hidden;
-                    > div:first-of-type {
+                    .book-menu {
                         position: sticky;
                         top: 0px;
-                        // align-self: flex-start;
-                    }
-                    .book-menu {
+                        transition: all 1s;
+                        z-index: 3;
                         border-bottom: 1px solid $fontTopGrey;
                         a {
                             display: inline-block;
@@ -429,6 +448,13 @@ export default {
                             border-bottom: 2px solid $green;
                             z-index: 2;
                         }
+                    }
+                    .fixed {
+                        opacity: 1;
+                        background-color: #fff;
+                        // margin-right: 40px;
+                        width: 90%;
+                        position: fixed;
                     }
                     .left-green {
                         position: relative;
@@ -473,6 +499,9 @@ export default {
                         .book-basic-pager {
                             display: flex;
                             justify-content: flex-end;
+                            button, li {
+                                background-color: #FFFFFA;
+                            }
                             .el-pagination button:hover {
                                 color: $green;
                             }
@@ -559,6 +588,8 @@ export default {
                                 }
                                 .avatar {
                                     flex: 1;
+                                    display: flex;
+                                    align-items: center;
                                     img {
                                         width: 45px;
                                         height: 45px;
@@ -605,6 +636,9 @@ export default {
                                 margin: 2vh 0 3vh;
                                 display: flex;
                                 justify-content: center;
+                                button, li {
+                                    background-color: #FFFFFA;
+                                }
                                 .el-pagination button:hover {
                                     color: $green;
                                 }
@@ -658,6 +692,7 @@ export default {
                         font-size: 18px;
                     }
                     .recommand-item {
+                        cursor: pointer;
                         display: flex;
                         .book-pic {
                             width: 5rem;

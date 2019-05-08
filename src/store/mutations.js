@@ -7,36 +7,40 @@ import {
     CHANGE_EDIT_BOOK_ID,
     CHANGE_EDIT_AUTHOR_STATUS,
     CHANGE_EDIT_AUTHOR_ID,
-    SET_CHAPTER
+    SET_CHAPTER,
+    CHANGE_SHELF_STATUS
 } from './mutation-types';
 
 export default {
     [CHANGE_CURRENT_BOOKID](state, curBookId) {
         state.curBookId = curBookId;
     },
-    [UPDATE_USERINFO] (state, userInfo) {
+    [UPDATE_USERINFO](state, userInfo) {
         state.userInfo = userInfo;
     },
-    [CHANGE_USEREMAIL] (state, userEmail) {
+    [CHANGE_USEREMAIL](state, userEmail) {
         state.userEmail = userEmail;
     },
-    [CHANGE_SEARCH] (state, search) {
+    [CHANGE_SEARCH](state, search) {
         search['pageSize'] = 10;
         state.search = search;
     },
     [CHANGE_EDIT_BOOK_STATUS](state, status) {
         state.editBookStatus = status;
     },
-    [CHANGE_EDIT_BOOK_ID] (state, id) {
+    [CHANGE_EDIT_BOOK_ID](state, id) {
         state.editBookId = id;
     },
-    [CHANGE_EDIT_AUTHOR_STATUS] (state, status) {
+    [CHANGE_EDIT_AUTHOR_STATUS](state, status) {
         state.editAuthorStatus = status;
     },
-    [CHANGE_EDIT_AUTHOR_ID] (state, id) {
+    [CHANGE_EDIT_AUTHOR_ID](state, id) {
         state.editAuthorId = id;
     },
-    [SET_CHAPTER] (state, chapter) {
+    [SET_CHAPTER](state, chapter) {
         state.chapter = chapter;
+    },
+    [CHANGE_SHELF_STATUS](state, isOnShelf) {
+        state.isOnShelf = isOnShelf;
     }
 }

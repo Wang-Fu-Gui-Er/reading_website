@@ -18,9 +18,9 @@
                 </div>
             </div>
             <div class="features">
-                <div @click="addShelf" class="shelf">
+                <div @click="changeShelfConfig(bookId, !isOnShelf)" class="shelf" :class="{'on-shelf': isOnShelf}">
                     <font-awesome-icon icon="bookmark"></font-awesome-icon>
-                    加入书架
+                    {{isOnShelf ? '已' : ''}}加入书架
                 </div>
                 <div class="note">
                     <font-awesome-icon icon="sticky-note"></font-awesome-icon>
@@ -55,6 +55,9 @@ const _ = require('lodash');
 import { mapState, mapMutations } from 'vuex';
 
 import { getStore } from '@/common/js/storage';
+import getUserInfo from '@/common/js/getUserInfo';
+import changeShelfConfig from '@/common/js/changeShelfConfig';
+import initShelf from '@/common/js/initShelf';
 
 import { getAllChapter, getChapterContent } from '@/api/api';
 
@@ -73,10 +76,12 @@ export default {
         this.chapterIndex = parseInt(chapterIndex, 10);
         this.initChapter();
         this.getContent();
+        this.initShelf(this.userInfo, bookId);
     },
     computed: {
-        ...mapState(['chapter']),
+        ...mapState(['chapter', 'isOnShelf']),
     },
+    mixins: [getUserInfo, changeShelfConfig, initShelf],
     methods: {
         ...mapMutations(['SET_CHAPTER']),
         async initChapter() {
@@ -171,6 +176,12 @@ export default {
                 .shelf {
                     color: #494c49;
                     margin-top: 10vh;
+                    &:hover {
+                        color: $green;
+                    }
+                }
+                .on-shelf {
+                    color: $green;
                 }
                 .note {
                     color: #415062;

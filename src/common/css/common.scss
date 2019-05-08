@@ -1,5 +1,4 @@
 $width: 1019px;
-
 $grey: #666;
 $littleGrey: #e6e6e0;
 $lightGrey: #b5b4b4;
@@ -8,67 +7,63 @@ $otherGrey: #777676;
 $fontTopGrey: #a6a6a4;
 $greyHover: #aaa;
 $greyWhite: #f5f5f5;
-
 $tabGrey: #cccccc;
-
 $butonBg: #eee;
-
 $black: black;
 $fontColor: #999;
 $green: #57ba59;
 $darkGreen: #526652;
 $darkHoverGreen: #56A857;
 $hoverGreen: #63d465;
-
 $addBookGreen: #b2f5d6;
-
 $red: #ff0000b5;
-
 $blue: #4c6589;
-
 * {
-  font-family: 'helvetica neue', helvetica, arial, 'hiragino sans gb', stheiti;
+    font-family: 'helvetica neue', helvetica, arial, 'hiragino sans gb', stheiti;
 }
 
 html {
-  // min-height: 100vh;
+    // min-height: 100vh;
 }
 
 body {
-  // overflow: hidden;
-  // min-height: 100vh;
-  // height: 100%;
-  // margin: 0;
-  // padding: 0;
-  // position: relative;
+    // overflow: hidden;
+    // min-height: 100vh;
+    // height: 100%;
+    // margin: 0;
+    // padding: 0;
+    // position: relative;
 }
 
 a {
-  cursor: pointer;
-  color: #666;
-  text-decoration: none;
-
-  &:hover {
-    color: #aaa;
-  }
+    cursor: pointer;
+    color: #666;
+    text-decoration: none;
+    &:hover {
+        color: #aaa;
+    }
 }
 
 img {
-  vertical-align: middle;
-  width: 100%;
-  height: 100%;
+    vertical-align: middle;
+    width: 100%;
+    height: 100%;
 }
 
 @mixin single-overflow {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 @mixin muti-overflow($row) {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: $row;
-  -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: $row;
+    -webkit-box-orient: vertical;
+}
+
+.el-textarea__inner:focus {
+    border-color: none;
 }

@@ -20,6 +20,8 @@ export default {
 <style lang="scss" scoped>
     .star {
         position: relative;
+        width: 87px;
+        height: 19px;
         >img {
             position: absolute;
             left: 50%;
