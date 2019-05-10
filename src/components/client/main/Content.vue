@@ -20,10 +20,8 @@
             <div class="line" v-if="typeIndex > 0"></div>
             <div class="head">
                 {{item.name}}
-                <span class="more" v-if="item.isMore">
+                <span @click="$router.push(`/list?recommandType=${item.recommandType}`)" class="more">
                     更多>
-                </span>
-                <span v-else>
                 </span>
             </div>
             <div class="content">
@@ -33,22 +31,22 @@
                     @click="$router.push(`book?bookId=${book.id}`)"
                     @mouseout="isHoverBook(typeIndex, bookIndex, false)"
                     @mouseover="isHoverBook(typeIndex, bookIndex, true)">
-                <div :class="{hover: book.isHover}" class="bottom">
-                    <div class="cover">
-                        <img :src="book.bookPic" alt="">
+                    <div :class="{hover: book.isHover}" class="bottom">
+                        <div class="cover">
+                            <img :src="book.bookPic" alt="">
+                        </div>
                     </div>
-                </div>
-                <div class="top" :class="{bookHover: book.isHover}">
-                    <div class="score">{{book.avgScore}}</div>
-                    <star :score="Number(book.avgScore)"></star>
-                    <div class="isFinish">{{book.isOver ? '完结' : '连载'}}</div>
-                </div>
-                <div :title="book.bookName" class="book_name">
-                    {{book.bookName}}
-                </div>
-                <div :title="book.authorName" class="author_name">
-                    {{book.authorName}}
-                </div>
+                    <div class="top" :class="{bookHover: book.isHover}">
+                        <div class="score">{{book.avgScore}}</div>
+                        <star :score="Number(book.avgScore)"></star>
+                        <div class="isFinish">{{book.isOver ? '完结' : '连载'}}</div>
+                    </div>
+                    <div :title="book.bookName" class="book_name">
+                        {{book.bookName}}
+                    </div>
+                    <div :title="book.authorName" class="author_name">
+                        {{book.authorName}}
+                    </div>
                 </div>
             </div>
             </div>
@@ -74,13 +72,13 @@ export default {
             sort: [],
             moreable: [{
                 name: '新书推荐',
-                isMore: true
+                recommendType: 'newly'
             }, {
                 name: '最受好评',
-                isMore: false
+                recommendType: 'favorable'
             }, {
                 name: '经典推荐',
-                isMore: true
+                recommendType: 'classic'
             }],
             books: [],
             moreLoading: true

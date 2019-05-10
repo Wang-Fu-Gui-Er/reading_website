@@ -10,6 +10,7 @@
                         <li
                             v-for="item in list"
                             :key="item.id"
+                            @click="changeTab(item.recommendType)"
                             :style="item.recommendType === recommendType ? 'font-weight: 600; cursor: pointer;' : 'cursor: pointer'">
                             {{item.text}}
                         </li>
@@ -56,7 +57,6 @@ export default {
         bookMenu
     },
     created() {
-        // console.log(this.$route)
         this.initBook();
     },
     mounted() {
@@ -66,11 +66,15 @@ export default {
         async initBook() {
             const query = this.$route.query;
             if (!_.isEmpty(query)) {
-                // this.$refs.menu.changeMenuConfig();
+                this.changeMenuConfig();
             }
             else {
                 this.getBooks();
             }
+        },
+        changeMenuConfig() {
+            const recommendType = this.$route.query.recommendType;
+            this.changeTab(recommendType);
         },
         async getBooks(pageNum = 1, recommendType = this.recommendType) {
             const curCategory = this.curCategory;
@@ -79,8 +83,9 @@ export default {
             this.book = data;
             this.page = page;
         },
-        setCurCategory(curCategory) {
-            this.curCategory = curCategory;
+        changeTab(recommendType) {
+            this.recommendType = recommendType;
+            this.getBooks(1, recommendType);
         }
     }
 }

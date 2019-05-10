@@ -78,6 +78,7 @@ import Login from './client/Login.vue';
 import Fallback from './client/Fallback.vue';
 
 import getUserInfo from '@/common/js/getUserInfo';
+import { MENU_VALUE } from '@/common/js/constants';
 
 // 首屏优化考虑一下
 export default {
@@ -104,13 +105,9 @@ export default {
     Fallback
   },
   created() {
-    // may change later
-    const pathArr = this.$route.path.split('/');
-    const curRoute = pathArr.length > 0 ? pathArr[1] : '';
-    const routeArr = ['', 'sort'];
-    const activeIndex = routeArr.findIndex(item => item === curRoute);
-    this.activeIndex = activeIndex.toString();
-
+    const name = this.$route.name;
+    const menuItem = MENU_VALUE.find(item => item.name === name);
+    this.activeIndex = menuItem.activeIndex;
     this.initUserConfig();
   },
   computed: {
@@ -118,8 +115,8 @@ export default {
       'search'
     ])
   },
-  inject:  ['reload'],
-  mixins:[getUserInfo],
+  inject: ['reload'],
+  mixins: [getUserInfo],
   methods: {
     ...mapMutations([
       'CHANGE_SEARCH'
@@ -132,7 +129,6 @@ export default {
         }
         this.isUserLogin = true;
       }
-      // this.reload();
     },
     searchBook(elmSearch) {
       const search = this.search;
@@ -156,11 +152,6 @@ export default {
       this.$router.push({name: 'mainPage'});
     }
   },
-  watch: {
-    '$route.path' (value) {
-      
-    }
-  }
 }
 </script>
 
