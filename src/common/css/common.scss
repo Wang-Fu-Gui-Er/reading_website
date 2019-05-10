@@ -19,7 +19,7 @@ $addBookGreen: #b2f5d6;
 $red: #ff0000b5;
 $blue: #4c6589;
 * {
-    font-family: 'helvetica neue', helvetica, arial, 'hiragino sans gb', stheiti;
+    font-family: '微软雅黑', 'Microsoft YaHei', 'helvetica neue', helvetica, arial, 'hiragino sans gb', stheiti;
 }
 
 html {
@@ -33,6 +33,10 @@ body {
     // margin: 0;
     // padding: 0;
     // position: relative;
+}
+
+ul>li {
+    list-style: none;
 }
 
 a {
@@ -66,4 +70,27 @@ img {
 
 .el-textarea__inner:focus {
     border-color: none;
+}
+
+.pager {
+    margin-top: 3vh;
+    text-align: center;
+    .el-pagination {
+        display: inline-block;
+    }
+    button,
+    li {
+        background-color: inherit;
+    }
+    .el-pagination button:hover {
+        color: $green;
+    }
+    .el-pager {
+        li:hover {
+            color: $green;
+        }
+        .active {
+            color: $green;
+        }
+    }
 }

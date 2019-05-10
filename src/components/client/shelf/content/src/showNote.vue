@@ -34,14 +34,14 @@
                         </span>
                     </div>
                 </div>
-            </div>
-            <div class="pager">
-                <el-pagination
-                    layout="total, prev, pager, next"
-                    :total="page.totalNum"
-                    @current-change="getContent"
-                    >
-                </el-pagination>
+                <div class="pager">
+                    <el-pagination
+                        layout="total, prev, pager, next"
+                        :total="page.totalNum"
+                        @current-change="getContent"
+                        >
+                    </el-pagination>
+                </div>
             </div>
         </div>
     </el-dialog>
@@ -149,13 +149,6 @@ export default {
                         color: $red;
                         margin-left: 10px;
                     }
-                }
-            }
-            .pager {
-                margin-top: 3vh;
-                text-align: center;
-                .el-pagination {
-                    display: inline-block;
                 }
             }
         }

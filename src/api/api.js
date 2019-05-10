@@ -7,6 +7,7 @@ export const getBook = param => fetch('/book/list/recommend', param);
 // 分类页
 export const getAllCategory = () => fetch('/category/getAllCategory');
 export const getAllBooks = param => fetch('/book/list/all', param);
+export const getSmallCateBook = param => fetch('/book/list/smallCategory', param);
 
 // 用户相关操作
 export const sendVerifyCode = param => fetch('/user/verifyCode/send', param);

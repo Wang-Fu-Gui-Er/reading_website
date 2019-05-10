@@ -3,8 +3,11 @@
         <div class="main-sort">
         <header>分类</header>
         <div class="content">
-            <el-button size="mini" plain v-for="item in sort" :key="item.id">
-            {{item}}
+            <el-button
+            size="mini" plain v-for="item in sort"
+            :key="item.id"
+            @click="$router.push(`/sort?bigCateId=${item.bigCateId}&smallCateId=${item.id}`)">
+            {{item.cateName}}
             </el-button>
         </div>
     </div>
@@ -13,7 +16,7 @@
         element-loading-text="拼命加载中"
         element-loading-background="#f6f5ee">
         <div class="inner-content">
-            <div class="moreable" v-for="item, typeIndex in moreable" :key="typeIndex">
+            <div class="moreable" v-for="(item, typeIndex) in moreable" :key="typeIndex">
             <div class="line" v-if="typeIndex > 0"></div>
             <div class="head">
                 {{item.name}}
@@ -25,7 +28,7 @@
             </div>
             <div class="content">
                 <div class="book"
-                    v-for="book, bookIndex in books[typeIndex]"
+                    v-for="(book, bookIndex) in books[typeIndex]"
                     :key="bookIndex"
                     @click="$router.push(`book?bookId=${book.id}`)"
                     @mouseout="isHoverBook(typeIndex, bookIndex, false)"
@@ -57,7 +60,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex';
 
-import {getSecSort, getBook} from '@/api/api';
+import { getSecSort, getBook } from '@/api/api';
 import getAllCategory from '@/common/js/getAllCategory.js';
 import star from '@/common/vue/star';
 
@@ -85,7 +88,7 @@ export default {
     },
     created() {
         this.initConfig();
-        getAllCategory(); // 为优化用户体验 提前请求分类的东西
+        getAllCategory(); // 为优化用户体验 提前请求分类的东西
     },
     computed: {
     },
@@ -94,7 +97,7 @@ export default {
             this.$set(this.books[typeIndex][bookIndex], 'isHover', isHover);
         },
         async initConfig() {
-            const sort = await getSecSort().then(res => res.map(item => item.cateName));
+            const sort = await getSecSort();
             const moreable = ['newly', 'favorable', 'classic'];
             const allPromises = moreable.map(item => getBook({
                 recommendType: item,
@@ -112,6 +115,9 @@ export default {
             this.sort = sort;
             this.books = books;
             this.moreLoading = false;
+        },
+        toSort(item) {
+            this.$router.push(`/sort?bigCateId=${item.bigCateId}&secCateId=${item.id}`)
         }
     }
 }

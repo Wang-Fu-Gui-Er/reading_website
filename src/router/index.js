@@ -4,6 +4,8 @@ import Router from 'vue-router'
 import Main from '@/components/Main'
 import Content from '@/components/client/main/Content';
 import Sort from '@/components/client/main/Sort'
+import List from '@/components/client/main/List'
+
 import Book from '@/components/client/book/Book'
 
 import Read from '@/components/client/read/Read';
@@ -24,7 +26,7 @@ import AuthorManage from '@/components/manage/content/authorManage/AuthorManage'
 import EditAuthor from '@/components/manage/content/authorManage/EditAuthor';
 import FallbackManage from '@/components/manage/content/fallbackManage/FallbackManage';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
     routes: [{
@@ -40,6 +42,11 @@ export default new Router({
                 path: 'sort',
                 name: 'sort',
                 component: Sort
+            },
+            {
+                path: 'list',
+                name: 'list',
+                component: List
             },
             {
                 path: 'book',

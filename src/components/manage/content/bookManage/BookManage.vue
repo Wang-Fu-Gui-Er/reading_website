@@ -159,12 +159,5 @@ export default {
                 }
             }
         }
-        .pager {
-            margin-top: 3vh;
-            text-align: center;
-            .el-pagination {
-                display: inline-block;
-            }
-        }
     }
 </style>

@@ -47,8 +47,8 @@
           <a v-if="!userInfo.isAdmin" @click="isFallback = true">意见反馈</a>
         </div>
       </div>
-      <el-menu v-if="!userInfo.isAdmin" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item v-for="(item, index) in menu" :key="index" :index="index.toString()">{{item}}</el-menu-item>
+      <el-menu v-if="!userInfo.isAdmin" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @click.native="handleSelect($event)">
+        <el-menu-item v-for="(item, index) in menu" :key="index" :data-path="item.path" :index="index.toString()">{{item.text}}</el-menu-item>
       </el-menu>
     </div>
     <router-view></router-view>
@@ -87,7 +87,7 @@ export default {
       isLogin: false,
       name: '',
       activeIndex: '0',
-      menu: ['首页', '分类', '有声书物', '榜单', '分享会'],
+      menu: [{path: '/', text: '首页'}, {path: '/sort', text: '分类'}, {text: '有声书物'}, {path: '/list', text: '榜单'}, {text: '分享会'}],
       isRegister: false,
       isUserLogin: false,
       isFallback: false,
@@ -141,12 +141,8 @@ export default {
       }
       this.$router.push({name: 'search'});
     },
-    handleSelect(key) {
-      let menuIndex = parseInt(key);
-      let path = '/';
-      if (menuIndex === 1) {
-        path = '/sort'
-      }
+    handleSelect(e) {
+      const path = e.target.dataset.path;
       this.$router.push({path});
     },
     hoverUser(flag) {
@@ -158,6 +154,11 @@ export default {
       this.clearUserInfo();
       this.isUserLogin = false;
       this.$router.push({name: 'mainPage'});
+    }
+  },
+  watch: {
+    '$route.path' (value) {
+      
     }
   }
 }

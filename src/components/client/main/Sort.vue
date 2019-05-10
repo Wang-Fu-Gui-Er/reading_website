@@ -2,301 +2,106 @@
     <div class="sort">
         <div class="sort-content">
             <div class="sort-left">
-                <div class="menu">
-                    <header>全部图书分类</header>
-                    <ul class="menu-content">
-                        <li
-                            v-for="(item, index) in allCategory"
-                            :key="index"
-                            @mouseleave="toggleTab(index, false)"
-                            @mouseenter="toggleTab(index, true)"
-                            @click="toBook">
-                            {{item.bigCategoryDO.cateName}}
-                            <div class="secSort" v-if="item.isShow">
-                                <span v-for="secItem in item.smallCategoryList" :key="secItem.id">
-                                    {{secItem.cateName}}
-                                </span>
-                            </div>
+                <book-menu 
+                    ref="menu"
+                    @get-book="getBook"
+                    @set-curgory="setCurCategory"
+                    v-model="isCover">
+                    <template v-if="isCover">
+                        <li class="header">
+                            {{curCategory.bigCategoryDO.cateName}}
                         </li>
-                    </ul>
-                </div>
+                        <li
+                            @click="$set(curCategory, 'secIndex', index)"
+                            v-for="(item, index) in curCategory.smallCategoryList"
+                            :key="item.id"
+                            :style="curCategory.secIndex === index ? 'font-weight: 600; cursor: pointer;' : 'cursor: pointer'">
+                            {{item.cateName}}
+                        </li>
+                    </template>
+                </book-menu>
             </div>
             <div class="sort-right">
-                <div class="sort-book">
-                    <div class="book"
-                        :style="item.isHover ? 'background: #f5f5f2' : ''"
-                        v-for="(item, index) in book" :key="item.id">
-                        <div class="book-img"
-                            @mouseover="hoverBook($event, index)"
-                            @mouseout="leaveBook(index)">
-                            <img :src="item.bookPic" alt="">
-                        </div>
-                        <div class="book-name">
-                            {{item.bookName}}
-                        </div>
-                        <div class="author-name">
-                            {{item.authorName}}
-                        </div>
-                        <div class="tool-tip" :class="{left: item.isEnd, show: item.isHover, 'not-show': !item.isHover}">
-                            <div class="score">评分: {{item.avgScore}}</div>
-                            <div class="over">
-                                {{item.isOver ? '已完结' : '连载中'}}
-                            </div>
-                            <div class="description">
-                                简介: {{item.bookDesc}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <header>
+                    喵阅读 > 全部图书 {{Object.keys(curCategory).length > 0 ? `> ${curCategory.bigCategoryDO.cateName} > ${curCategory.smallCategoryList[curCategory.secIndex].cateName}` : ''}}
+                </header>
+                <book-list @get-book="getBook" :book="book" :page="page"></book-list>
             </div>
         </div>
     </div>
 </template>
+
 <script>
-import {mapState, mapActions, mapMutations} from 'vuex';
+import _ from 'lodash';
 
-import {getAllBooks} from '@/api/api.js';
-import getAllCategory from '@/common/js/getAllCategory.js';
+import { mapState, mapActions, mapMutations } from 'vuex';
 
-import {getStore} from '@/common/js/storage'
+import bookList from './src/bookList';
+import bookMenu from './src/bookMenu';
+
+import { getAllBooks, getSmallCateBook } from '@/api/api.js';
+
 
 export default {
     data() {
         return {
+            book: [],
+            curCategory: {},
+            page: {},
             allCategory: [],
-            isShowSecSort: false,
-            book: []
+            isCover: false
         }
     },
+    components: {
+        bookList,
+        bookMenu
+    },
     created() {
-        this.initConfig();
+        this.initBook();
     },
     methods: {
-        toggleTab(index, isShow) {
-            this.$set(this.allCategory[index], 'isShow', isShow);
-        },
-        toBook(e) {
-            e.stopPropagation();
-        },
-        async initConfig() {
-            if (!getStore('allCategory')) {
-                await getAllCategory();
+        async initBook() {
+            const query = this.$route.query;
+            if (!_.isEmpty(query)) {
+                this.$refs.menu.changeMenuConfig();
             }
-            const allCategory = getStore('allCategory');
-            let {data, page} = await getAllBooks({pageNum: 1, pageSize: 10});
+            else {
+                this.getBook();
+            }
+        },
+        async getBook(pageNum = 1) {
+            const curCategory = this.curCategory;
+            let {data, page} = Object.keys(curCategory).length > 0 ? await getSmallCateBook({
+                smallCateId: curCategory.smallCategoryList[curCategory.secIndex].id,
+                pageNum,
+                pageSize: 10
+            }) : await getAllBooks({pageNum, pageSize: 10});
             data.map(item => item.avgScore = item.avgScore.toFixed(1));
             this.book = data;
-            this.allCategory = allCategory;
+            this.page = page;
         },
-        hoverBook(e, index) {
-            const viewWidth = window.innerWidth || document.documentElement.clientWidth;
-            const isEnd = viewWidth - e.x < 11 * 16 * 2 - 20;
-            this.$set(this.book[index], 'isEnd', isEnd);
-            this.$set(this.book[index], 'isHover', true);
-        },
-        leaveBook(index) {
-            this.$set(this.book[index], 'isHover', false);
+        setCurCategory(curCategory) {
+            this.curCategory = curCategory;
         }
     }
 }
 </script>
 <style lang="scss" scoped>
-    ul > li {
-        list-style: none;
-    }
+    
     .sort {
         background-color: #fdfdfb;
         padding-top: 3rem;
         padding-bottom: 3rem;
+        margin-bottom: 10vh;
         .sort-content {
             width: $width;
             margin: 0 auto;
             display: flex;
-            .menu {
-                width: $menuWidth;
-                background-color: rgb(245, 244, 242);
-                header {
-                    text-align: center;
-                    height: 40px;
-                    line-height: 40px;
-                    background-color: #676a6d;
-                    color: #fff;
-                }
-                .menu-content {
-                    padding-left: 0px;
-                    margin: 0px;
-                    z-index: 5;
-                    li {
-                        font-size: 15px;
-                        padding: 10px 0 10px 20px;
-                        position: relative;
-                        &::after {
-                            content: '>';
-                            position: absolute;
-                            right: 7px;
-                            top: 8px;
-                            color: #ccc;
-                        }
-                        &:hover {
-                            background-color: #f2f2f2;
-                        }
-                        .secSort {
-                            z-index: 5;
-                            position: absolute;
-                            padding: 5px;
-                            width: 320px;
-                            top: 0px;
-                            left: $menuWidth;
-                            display: flex;
-                            flex-wrap: wrap;
-                            background-color: #f2f2f2;
-                            border: .8px solid #ccc;
-                            span {
-                                height: 30px;
-                                padding: 0 10px;
-                                line-height: 30px;
-                                cursor: pointer;
-                                &:hover {
-                                    text-decoration: underline;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            
             .sort-right {
                 flex-grow: 1;
                 margin-left: 2rem;
-                .sort-book {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, 11rem);
-                    grid-auto-columns: dense;
-                    grid-row-gap: 60px;
-                    grid-column-gap: 80px;
-                    .book {
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        align-items: center;
-                        font-weight: 400;
-                        position: relative;
-                        padding: 10px;
-                        .book-img {
-                            width: 8.4rem;
-                            height: 11rem;
-                        }
-                        .book-name, .author-name {
-                            padding-top: 8px;
-                        }
-                        .book-name {
-                            font-size: 15px;
-                            font-weight: 500;
-                        }
-                        .author-name {
-                            font-size: 12px;
-                        }
-                        .tool-tip {
-                            opacity: 0;
-                            display: none;
-                            transition: all 1s;
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            width: 8rem;
-                            height: 13rem;
-                            z-index: 2;
-                            position: absolute;
-                            left: calc(11rem + 13px);
-                            top: 50%;
-                            transform: translateY(-50%);
-                            border-radius: 3px;
-                            background-color: #fdfcfc;
-                            border: 1px solid $grey;
-                            padding: 0 15px;
-                            &::before {
-                                content: '';
-                                width: 0px;
-                                height: 0;
-                                position: absolute;
-                                top: 50%;
-                                left: -13px;
-                                transform: translateY(-50%);
-                                border-top: 13px solid transparent;
-                                border-bottom: 13px solid transparent;
-                                border-right: 13px solid #000;
-                            }
-                            &::after {
-                                content: '';
-                                width: 0px;
-                                height: 0;
-                                position: absolute;
-                                top: 50%;
-                                left: -12px;
-                                transform: translateY(-50%);
-                                border-top: 13px solid transparent;
-                                border-bottom: 13px solid transparent;
-                                border-right: 13px solid #fdfcfc;
-                            }
-                            > div {
-                                padding-top: 10px;
-                            }
-                            .score, .over {
-                                text-align: center;
-                            }
-                            .description {
-                                @include muti-overflow(5);
-                            }
-                        }
-                        .not-show {
-                            display: none;
-                            opacity: 0;
-                            transition: all 1s;
-                        }
-                        @keyframes display {
-                            to {
-                                opacity: 1;
-                            }
-                        }
-                        .show {
-                            animation: display .7s linear forwards;
-                            display: initial;
-                            // opacity: 1;
-                            transition: all 1s;
-                        }
-                        .left {
-                            left: initial;
-                            right: calc(11rem + 13px);
-                            &::before {
-                                content: '';
-                                width: 0px;
-                                height: 0;
-                                position: absolute;
-                                top: 50%;
-                                left: initial;
-                                right: -13px;
-                                transform: translateY(-50%);
-                                border-top: 13px solid transparent;
-                                border-bottom: 13px solid transparent;
-                                border-right: initial;
-                                border-left: 13px solid #000;
-                            }
-                            &::after {
-                                content: '';
-                                width: 0px;
-                                height: 0;
-                                position: absolute;
-                                top: 50%;
-                                left: initial;
-                                right: -12px;
-                                transform: translateY(-50%);
-                                border-top: 13px solid transparent;
-                                border-bottom: 13px solid transparent;
-                                border-right: initial;
-                                border-left: 13px solid #fdfcfc;
-                            }
-                        }
-                    }
-                }
+                
             }
         }
     }
