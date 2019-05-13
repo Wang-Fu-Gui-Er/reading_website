@@ -13,7 +13,7 @@
                         第{{curChapter.sequence}}章: {{curChapter.title}}
                     </div>
                 </header>
-                <div class="text">
+                <div class="text" @mouseup="noteText">
                     {{content}}
                 </div>
             </div>
@@ -45,6 +45,9 @@
                     没有下一章
                 </div>
             </div>
+        </div>
+        <div class="mouse-tail">
+            
         </div>
     </div>
 </template>
@@ -115,8 +118,9 @@ export default {
             this.getContent();
             this.$router.push(`read?bookId=${this.bookId}&chapterIndex=${chapterIndex}`);
         },
-        addShelf() {
-
+        noteText() {
+            const text = window.getSelection().toString();
+            console.log(text)
         }
     }
 }
@@ -125,11 +129,12 @@ export default {
 
 <style lang="scss" scoped>
     .read {
-        min-width: 1152px;
+        // min-width: 1152px;
         padding: 0 6vw;
         min-height: 100vh;
         background: #ede8d5;
         box-shadow: inset 0px 0px 8px 1px $tabGrey;
+        position: relative;
         .read-content {
             display: flex;
             .read-header {
@@ -216,6 +221,11 @@ export default {
                     margin-bottom: 1vh;
                 }
             }
+        }
+        .mouse-tail {
+            width: 100px;
+            height: 100px;
+            background-color: #333;
         }
     }
 </style>
